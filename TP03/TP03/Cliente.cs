@@ -30,5 +30,10 @@ namespace TP03
             Direccion = direccion;
             Telefono = telefono;
         }
+
+        public static Cliente CrearCliente()
+        {
+            return new Cliente();
+        }
     }
 }

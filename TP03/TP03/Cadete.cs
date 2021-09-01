@@ -33,5 +33,13 @@ namespace TP03
             Telefono = telefono;
             ListadoPedidos = new List<Pedido>();
         }
+
+        public void AgregarPedido(Pedido P)
+        {
+            if(P.Estado != Estados.Entregado)
+            {
+                ListadoPedidos.Add(P);
+            }
+        }
     }
 }
