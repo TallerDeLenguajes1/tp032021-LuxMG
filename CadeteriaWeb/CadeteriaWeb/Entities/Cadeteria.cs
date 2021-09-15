@@ -8,8 +8,8 @@ namespace CadeteriaWeb.Entities
     public class Cadeteria
     {
         private string nombre;
-        private List<Cadete> listadoCadetes = new();
-        private List<Pedido> listadoPedidos = new();
+        private List<Cadete> listadoCadetes;
+        private List<Pedido> listadoPedidos;
 
         public string Nombre { get => nombre; set => nombre = value; }
         internal List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
@@ -18,11 +18,15 @@ namespace CadeteriaWeb.Entities
         public Cadeteria()
         {
             Nombre = "La Cadeteria";
+            listadoCadetes = new();
+            listadoPedidos = new();
         }
 
         public Cadeteria(string nombre)
         {
             Nombre = nombre;
+            listadoCadetes = new();
+            listadoPedidos = new();
         }
     }
 }

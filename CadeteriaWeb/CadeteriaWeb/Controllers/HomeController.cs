@@ -13,17 +13,54 @@ namespace CadeteriaWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public static Cadeteria cadeteria = new Cadeteria();
+        private readonly Cadeteria cadeteria;
         private readonly Logger nlog;
 
-        public HomeController(Logger nlog)
+        public HomeController(Logger nlog, Cadeteria cadeteria)
         {
             this.nlog = nlog;
+            this.cadeteria = cadeteria;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(cadeteria);
+        }
+
+        public IActionResult CreatePedido(string observacion, string nombreCliente, string direccionCliente, string telefonoCliente)
+        {
+            if(observacion == null || nombreCliente == null || direccionCliente == null || telefonoCliente == null)
+            {
+                return View();
+            }
+
+            Pedido P = new Pedido(observacion, nombreCliente, direccionCliente, telefonoCliente);
+            cadeteria.ListadoPedidos.Add(P);
+            
+            return View("ListadoPedidos", cadeteria.ListadoPedidos);
+        }
+
+        public IActionResult ListadoPedidos()
+        {
+            return View(cadeteria.ListadoPedidos);
+        }
+
+        public IActionResult CreateCadete(string nombre, string direccion, string telefono)
+        {
+            if (nombre == null || direccion == null || telefono == null)
+            {
+                return View();
+            }
+
+            Cadete C = new Cadete(nombre, direccion, telefono);
+            cadeteria.ListadoCadetes.Add(C);
+
+            return View("ListadoCadetes", cadeteria.ListadoCadetes);
+        }
+
+        public IActionResult ListadoCadetes()
+        {
+            return View(cadeteria.ListadoCadetes);
         }
 
         public IActionResult Privacy()

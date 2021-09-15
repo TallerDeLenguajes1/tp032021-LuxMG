@@ -1,3 +1,4 @@
+using CadeteriaWeb.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +14,8 @@ namespace CadeteriaWeb
 {
     public class Startup
     {
+        public static Cadeteria cadeteria = new();
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,6 +26,7 @@ namespace CadeteriaWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(cadeteria);
             services.AddSingleton(NLog.LogManager.GetCurrentClassLogger());
             services.AddControllersWithViews();
         }

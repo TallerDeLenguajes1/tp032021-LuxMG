@@ -2,6 +2,8 @@
 {
     public class Cliente
     {
+        private static int contador = 0;
+
         private int id;
         private string nombre;
         private string direccion;
@@ -14,20 +16,15 @@
 
         public Cliente()
         {
-
+            Id = 0;
         }
 
-        public Cliente(int id, string nombre, string direccion, string telefono)
+        public Cliente(string nombre, string direccion, string telefono)
         {
-            Id = id;
+            Id = ++contador;
             Nombre = nombre;
             Direccion = direccion;
             Telefono = telefono;
         }
-
-        //public static Cliente CrearCliente()
-        //{
-            
-        //}
     }
 }
