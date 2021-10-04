@@ -6,13 +6,13 @@
     {
         private static int contador = 0;
 
-        private int nro;
+        private int id;
         private string observacion;
         private Cliente cliente;
         private EstadoPedido estado;
         private int idCadete;
 
-        public int Nro { get => nro; set => nro = value; }
+        public int Id { get => id; set => id = value; }
         public string Observacion { get => observacion; set => observacion = value; }
         public Cliente Cliente { get => cliente; set => cliente = value; }
         public EstadoPedido Estado { get => estado; set => estado = value; }
@@ -20,7 +20,7 @@
 
         public Pedido()
         {
-            Nro = 0;
+            Id = 0;
             Estado = EstadoPedido.Vacio;
             IdCadete = 0;
             Cliente = new Cliente();
@@ -28,7 +28,7 @@
 
         public Pedido(string observacion, string nombreCliente, string direccionCliente, string telefonoCliente)
         {
-            Nro = ++contador;
+            Id = ++contador;
             Observacion = observacion;
             Estado = EstadoPedido.Procesando;
             IdCadete = 0;

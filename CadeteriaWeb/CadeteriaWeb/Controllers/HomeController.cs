@@ -27,41 +27,41 @@ namespace CadeteriaWeb.Controllers
             return View(cadeteria);
         }
 
-        public IActionResult CreatePedido(string observacion, string nombreCliente, string direccionCliente, string telefonoCliente)
-        {
-            if(observacion == null || nombreCliente == null || direccionCliente == null || telefonoCliente == null)
-            {
-                return View();
-            }
+        //public IActionResult CreatePedido(string observacion, string nombreCliente, string direccionCliente, string telefonoCliente)
+        //{
+        //    if(observacion == null || nombreCliente == null || direccionCliente == null || telefonoCliente == null)
+        //    {
+        //        return View();
+        //    }
 
-            Pedido P = new Pedido(observacion, nombreCliente, direccionCliente, telefonoCliente);
-            cadeteria.ListadoPedidos.Add(P);
+        //    Pedido P = new Pedido(observacion, nombreCliente, direccionCliente, telefonoCliente);
+        //    db.ListadoPedidos.Add(P);
             
-            return View("ListadoPedidos", cadeteria.ListadoPedidos);
-        }
+        //    return View("ListadoPedidos", db.ListadoPedidos);
+        //}
 
-        public IActionResult ListadoPedidos()
-        {
-            return View(cadeteria.ListadoPedidos);
-        }
+        //public IActionResult ListadoPedidos()
+        //{
+        //    return View(db.ListadoPedidos);
+        //}
 
-        public IActionResult CreateCadete(string nombre, string direccion, string telefono)
-        {
-            if (nombre == null || direccion == null || telefono == null)
-            {
-                return View();
-            }
+        //public IActionResult CreateCadete(string nombre, string direccion, string telefono)
+        //{
+        //    if (nombre == null || direccion == null || telefono == null)
+        //    {
+        //        return View();
+        //    }
 
-            Cadete C = new Cadete(nombre, direccion, telefono);
-            cadeteria.ListadoCadetes.Add(C);
+        //    Cadete C = new Cadete(nombre, direccion, telefono);
+        //    db.ListadoCadetes.Add(C);
 
-            return View("ListadoCadetes", cadeteria.ListadoCadetes);
-        }
+        //    return View("ListadoCadetes", db.ListadoCadetes);
+        //}
 
-        public IActionResult ListadoCadetes()
-        {
-            return View(cadeteria.ListadoCadetes);
-        }
+        //public IActionResult ListadoCadetes()
+        //{
+        //    return View(db.ListadoCadetes);
+        //}
 
         public IActionResult Privacy()
         {

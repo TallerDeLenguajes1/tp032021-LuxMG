@@ -32,10 +32,5 @@ namespace CadeteriaWeb.Entities
             Telefono = telefono;
         }
 
-        public void AgregarPedido(Pedido P)
-        {
-            P.IdCadete = Id;
-            P.Estado = EstadoPedido.En_Camino;
-        }
     }
 }

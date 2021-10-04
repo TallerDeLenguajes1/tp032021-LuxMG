@@ -14,7 +14,7 @@ namespace CadeteriaWeb
 {
     public class Startup
     {
-        public static Cadeteria cadeteria = new();
+        public static TempDB db = new();
 
         public Startup(IConfiguration configuration)
         {
@@ -26,7 +26,7 @@ namespace CadeteriaWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(cadeteria);
+            services.AddSingleton(db);
             services.AddSingleton(NLog.LogManager.GetCurrentClassLogger());
             services.AddControllersWithViews();
         }
