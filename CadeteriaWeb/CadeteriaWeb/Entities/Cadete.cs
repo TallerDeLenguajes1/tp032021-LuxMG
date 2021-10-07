@@ -18,6 +18,7 @@ namespace CadeteriaWeb.Entities
         public string Nombre { get => nombre; set => nombre = value; }
         public string Direccion { get => direccion; set => direccion = value; }
         public string Telefono { get => telefono; set => telefono = value; }
+        public static int Contador { get => contador; set => contador = value; }
 
         public Cadete()
         {
@@ -26,11 +27,18 @@ namespace CadeteriaWeb.Entities
 
         public Cadete(string nombre, string direccion, string telefono)
         {            
-            Id = ++contador;
+            Id = ++Contador;
             Nombre = nombre;
             Direccion = direccion;
             Telefono = telefono;
         }
 
+        public Cadete(int id, string nombre, string direccion, string telefono)
+        {
+            Id = id;
+            Nombre = nombre;
+            Direccion = direccion;
+            Telefono = telefono;
+        }
     }
 }

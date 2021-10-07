@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Listado cadetes";
+}
+
+@model List<CadeteriaWeb.Entities.Cadete>;
+
+<div class="text-center">
+    <h1 class="display-4">Listado de Cadetes</h1>
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var C in @Model)
+            {
+                <tr>
+                    <td> @C.Id </td>
+                    <td> @C.Nombre </td>
+                    <td> @C.Direccion </td>
+                    <td> @C.Telefono </td>
+                    <td> 
+                        <form asp-action="UpdateCadete" method="post">
+                            <input hidden type="number" name="id" value="@C.Id" />
+                            <button type="submit" class="btn btn-primary">Editar</button>
+                        </form> 
+                    </td>
+                    <td>
+                        <form asp-action="DeleteCadete" method="post">
+                            <input hidden type="number" name="id" value="@C.Id" />
+                            <input hidden type="text" name="confirm" value="false" />
+                            <button type="submit" class="btn btn-primary">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

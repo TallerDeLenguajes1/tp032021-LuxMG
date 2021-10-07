@@ -13,13 +13,23 @@ namespace CadeteriaWeb.Entities
 
         public string Nombre { get => nombre; set => nombre = value; }
         internal List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
-        public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
+        internal List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
 
         public Cadeteria()
         {
             Nombre = "La Cadeteria";
             listadoCadetes = TempDB.ObtenerCadetes();
             listadoPedidos = TempDB.ObtenerPedidos();
+
+            if (listadoCadetes != null)
+                Cadete.Contador = TempDB.UltimoIDCadete();
+            else
+                listadoCadetes = new List<Cadete>();
+
+            if (listadoPedidos != null)
+                Pedido.Contador = TempDB.UltimoIDPedido();
+            else
+                listadoPedidos = new List<Pedido>();
         }
 
         // ---------------------------- CADETES ----------------------------
@@ -40,6 +50,11 @@ namespace CadeteriaWeb.Entities
             return ListadoCadetes.Find(x =>  x.Id == id);
         }
 
+        public void OrdenarCadetes()
+        {
+            ListadoCadetes.Sort((x, y) => x.Id.CompareTo(y.Id));
+        }
+
         // ---------------------------- PEDIDOS ----------------------------
         public void AgregarPedido(Pedido P)
         {
@@ -57,6 +72,11 @@ namespace CadeteriaWeb.Entities
         {
             return ListadoPedidos.Find(x => x.Id == id);
         }
-        
+
+        public void OrdenarPedidos()
+        {
+            ListadoPedidos.Sort((x, y) => x.Id.CompareTo(y.Id));
+        }
+
     }
 }
