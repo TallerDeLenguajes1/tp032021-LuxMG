@@ -15,6 +15,8 @@
                 <th scope="col">Observacion</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Cliente</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Telefono</th>
                 <th scope="col">Id del cadete</th>
             </tr>
         </thead>
@@ -26,6 +28,8 @@
                 <td> @P.Observacion </td>
                 <td> @P.Estado.ToString() </td>
                 <td> @P.Cliente.Nombre </td>
+                <td> @P.Cliente.Direccion </td>
+                <td> @P.Cliente.Telefono </td>
                 @if (P.IdCadete == 0)
                 {
                     <td> No asignado </td>

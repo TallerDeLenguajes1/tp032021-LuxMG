@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,9 +11,9 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-5">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CadeteriaWeb</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">CadeteriaWeb</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,34 +21,26 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
-                        <li class="nav-item">
+                        <li class="nav-item m-3">
                             <div class="btn-group">
-                                <a class="btn btn-outline-dark" asp-area="" asp-controller="Pedido" asp-action="Index">Pedidos</a>
+                                <a class="btn btn-outline-dark" asp-controller="Pedido" asp-action="Index">Pedidos</a>
                                 <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Pedido" asp-action="CreatePedido">Cargar pedido</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
+                                    <a class="dropdown-item" asp-controller="Pedido" asp-action="CreatePedido">Cargar pedido</a>
                                 </div>
                             </div>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item m-3">
                             <div class="btn-group">
-                                <a class="btn btn-outline-dark" asp-area="" asp-controller="Cadete" asp-action="Index">Cadetes</a>
+                                <a class="btn btn-outline-dark" asp-controller="Cadete" asp-action="Index">Cadetes</a>
                                 <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Cadete" asp-action="CreateCadete">Cargar cadete</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
+                                    <a class="dropdown-item" asp-controller="Cadete" asp-action="CreateCadete">Cargar cadete</a>
                                 </div>
                             </div>
                         </li>
@@ -66,7 +58,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - CadeteriaWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - CadeteriaWeb - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

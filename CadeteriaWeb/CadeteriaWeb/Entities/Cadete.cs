@@ -13,12 +13,14 @@ namespace CadeteriaWeb.Entities
         private string nombre;
         private string direccion;
         private string telefono;
+        private double jornal;
 
         public int Id { get => id; set => id = value; }
         public string Nombre { get => nombre; set => nombre = value; }
         public string Direccion { get => direccion; set => direccion = value; }
         public string Telefono { get => telefono; set => telefono = value; }
         public static int Contador { get => contador; set => contador = value; }
+        public double Jornal { get => jornal; set => jornal = value; }
 
         public Cadete()
         {
@@ -31,6 +33,7 @@ namespace CadeteriaWeb.Entities
             Nombre = nombre;
             Direccion = direccion;
             Telefono = telefono;
+            Jornal = 0;
         }
 
         public Cadete(int id, string nombre, string direccion, string telefono)
@@ -39,6 +42,7 @@ namespace CadeteriaWeb.Entities
             Nombre = nombre;
             Direccion = direccion;
             Telefono = telefono;
+            Jornal = 0;
         }
     }
 }

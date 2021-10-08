@@ -78,5 +78,17 @@ namespace CadeteriaWeb.Entities
             ListadoPedidos.Sort((x, y) => x.Id.CompareTo(y.Id));
         }
 
+        //public void AsignarCadeteAPedido(Pedido P, int idCadete)
+        //{
+        //    P.IdCadete = idCadete;
+        //}
+
+        //public void EntregarPedido(Pedido P)
+        //{
+        //    if (P.IdCadete != 0)
+        //        P.Estado = EstadoPedido.Entregado;
+        //        this.BuscarCadetePorID(P.IdCadete).Jornal += 100;
+        //}
+
     }
 }

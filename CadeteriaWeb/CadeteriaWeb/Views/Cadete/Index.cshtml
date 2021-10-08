@@ -15,6 +15,7 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Direccion</th>
                 <th scope="col">Telefono</th>
+                <th scope="col">Jornal</th>
                 <th scope="col">Editar</th>
                 <th scope="col">Eliminar</th>
             </tr>
@@ -27,6 +28,7 @@
                     <td> @C.Nombre </td>
                     <td> @C.Direccion </td>
                     <td> @C.Telefono </td>
+                    <td> @C.Jornal </td>
                     <td> 
                         <form asp-action="UpdateCadete" method="post">
                             <input hidden type="number" name="id" value="@C.Id" />
