@@ -36,12 +36,15 @@ namespace CadeteriaWeb.Entities
         public void AgregarCadete(Cadete C)
         {
             ListadoCadetes.Add(C);
-            TempDB.GuardarCadetes(ListadoCadetes);
         }
 
         public void EliminarCadete(int id)
         {
             ListadoCadetes.Remove(BuscarCadetePorID(id));
+        }
+
+        public void GuardarCambiosCadetes()
+        {
             TempDB.GuardarCadetes(ListadoCadetes);
         }
 
@@ -59,12 +62,15 @@ namespace CadeteriaWeb.Entities
         public void AgregarPedido(Pedido P)
         {
             ListadoPedidos.Add(P);
-            TempDB.GuardarPedidos(ListadoPedidos);
         }
 
         public void EliminarPedido(int id)
         {
             ListadoPedidos.Remove(BuscarPedidoPorID(id));
+        }
+
+        public void GuardarCambiosPedidos()
+        {
             TempDB.GuardarPedidos(ListadoPedidos);
         }
 

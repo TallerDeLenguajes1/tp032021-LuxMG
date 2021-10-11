@@ -33,6 +33,7 @@ namespace CadeteriaWeb.Controllers
 
             Cadete C = new Cadete(nombre, direccion, telefono);
             cadeteria.AgregarCadete(C);
+            cadeteria.GuardarCambiosCadetes();
 
             return View("Index", cadeteria.ListadoCadetes);
         }
@@ -53,6 +54,7 @@ namespace CadeteriaWeb.Controllers
             cadeteria.EliminarCadete(id);
             cadeteria.AgregarCadete(CNew);
             cadeteria.OrdenarCadetes();
+            cadeteria.GuardarCambiosCadetes();
 
             return View("Index", cadeteria.ListadoCadetes);
         }
@@ -67,6 +69,8 @@ namespace CadeteriaWeb.Controllers
                 return View(C);
 
             cadeteria.EliminarCadete(id);
+            cadeteria.GuardarCambiosCadetes();
+
             return View("Index", cadeteria.ListadoCadetes);
         }
 

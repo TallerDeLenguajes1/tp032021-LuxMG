@@ -33,7 +33,7 @@
                     <td>
                         <form asp-action="EntregarPedido" method="post">
                             <input hidden type="number" name="id" value="@P.Id" />
-                            @if (P.Cadete == null)
+                            @if (P.Estado != CadeteriaWeb.Entities.EstadoPedido.En_Camino)
                             {
                                 <button type="submit" class="btn btn-success" disabled><i class="bi bi-check-circle"></i></button>
                             }
@@ -47,7 +47,15 @@
                     <td>
                         <form asp-action="CancelarPedido" method="post">
                             <input hidden type="number" name="id" value="@P.Id" />
-                            <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i></button>
+                            @if (P.Estado == CadeteriaWeb.Entities.EstadoPedido.Entregado || P.Estado == CadeteriaWeb.Entities.EstadoPedido.Cancelado)
+                            {
+                                <button type="submit" class="btn btn-danger" disabled><i class="bi bi-x-circle"></i></button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i></button>
+                            }
+
                         </form>
                     </td>
 

@@ -50,5 +50,16 @@
             Cadete = C;
             Estado = EstadoPedido.En_Camino;
         }
+
+        public void Entregar()
+        {
+            Cadete.Jornal += 100;
+            Estado = EstadoPedido.Entregado;
+        }
+
+        public void Cancelar()
+        {
+            Estado = EstadoPedido.Cancelado;
+        }
     }
 }
