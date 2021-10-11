@@ -37,7 +37,38 @@ namespace CadeteriaWeb.Controllers
             return View("Index", cadeteria.ListadoPedidos);
         }
 
+        public IActionResult UpdatePedido(int id, string observacion, string nombreCliente, string direccionCliente, string telefonoCliente)
+        {
+            if (observacion == null || nombreCliente == null || direccionCliente == null || telefonoCliente == null)
+            {
+                Pedido P = cadeteria.BuscarPedidoPorID(id);
 
+                if (P != null)
+                    return View(P);
+                else
+                    return View("Index", cadeteria.ListadoPedidos);
+            }
+
+            Pedido PNew = new Pedido(id, observacion, nombreCliente, direccionCliente, telefonoCliente);
+            cadeteria.EliminarPedido(id);
+            cadeteria.AgregarPedido(PNew);
+            cadeteria.OrdenarPedidos();
+
+            return View("Index", cadeteria);
+        }
+
+        public IActionResult DeletePedido(int id, string confirm)
+        {
+            Pedido P = cadeteria.BuscarPedidoPorID(id);
+            if (P == null)
+                return View("Index", cadeteria.ListadoPedidos);
+
+            if (confirm != "true")
+                return View(P);
+
+            cadeteria.EliminarPedido(id);
+            return View("Index", cadeteria.ListadoPedidos);
+        }
 
     }
 }

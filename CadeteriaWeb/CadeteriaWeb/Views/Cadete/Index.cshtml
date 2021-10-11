@@ -32,14 +32,14 @@
                     <td> 
                         <form asp-action="UpdateCadete" method="post">
                             <input hidden type="number" name="id" value="@C.Id" />
-                            <button type="submit" class="btn btn-primary">Editar</button>
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i></button>
                         </form> 
                     </td>
                     <td>
                         <form asp-action="DeleteCadete" method="post">
                             <input hidden type="number" name="id" value="@C.Id" />
                             <input hidden type="text" name="confirm" value="false" />
-                            <button type="submit" class="btn btn-primary">Eliminar</button>
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>
