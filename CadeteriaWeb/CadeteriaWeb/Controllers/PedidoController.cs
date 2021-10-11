@@ -95,5 +95,15 @@ namespace CadeteriaWeb.Controllers
             return View("Index", cadeteria.ListadoPedidos);
         }
 
+        [Route("Pedido/{id:int}")]
+        public IActionResult VerCliente(int id)
+        {
+            Pedido P = cadeteria.BuscarPedidoPorID(id);
+            if (P == null)
+                return View("Index", cadeteria.ListadoPedidos);
+
+            return View(P);
+        }
+
     }
 }

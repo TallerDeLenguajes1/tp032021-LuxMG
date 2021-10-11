@@ -1,0 +1,27 @@
+﻿@model CadeteriaWeb.Entities.Pedido;
+@{
+    ViewData["Title"] = "Datos del cliente " + Model.Cliente.Nombre;
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Ver cliente</h1>
+    <br />
+
+    <div>
+        <h4>Datos del cliente: </h4>
+        <div class="form-group row">
+            <label><b>Nombre: </b>@Model.Cliente.Nombre</label>
+        </div>
+        <div class="form-group row">
+            <label><b>Direccion: </b>@Model.Cliente.Direccion</label>
+        </div>
+        <div class="form-group row">
+            <label><b>Telefono: </b>@Model.Cliente.Telefono</label>
+        </div>
+
+    </div>
+</div>
+
+
+
