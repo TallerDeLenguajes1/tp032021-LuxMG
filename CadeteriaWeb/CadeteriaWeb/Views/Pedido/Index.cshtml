@@ -61,14 +61,36 @@
 
                     <td> @P.Cliente.Nombre   <a class="" asp-controller="Pedido" asp-action="VerCliente" asp-route-id="@P.Id"><i class="bi bi-eye"></i></a></td>
 
-                    @if (P.Cadete == null)
-                    {
-                        <td> No asignado   <a class="" asp-controller="Asignacion" asp-action="Index"><i class="bi bi-pencil-square"></i></a></td>
-                    }
-                    else
-                    {
-                        <td> @P.Cadete.Nombre   <a class="" asp-controller="Asignacion" asp-action="Index"><i class="bi bi-pencil-square"></i></a></td>
-                    }
+                    <td>
+                        <form asp-action="AsignarCadete" method="post">
+                            <label for="cadetes" hidden>Cadetes:</label>
+                            <select id="cadetes" name="idCadete">
+                                <option value="0">---Sin asignar---</option>
+                                @foreach (var C in CadeteriaWeb.Entities.TempDB.ObtenerCadetes())
+                                {
+                                    @if (P.Cadete != null && P.Cadete.Id == C.Id)
+                                    {
+                                        <option value="@C.Id" selected>@C.Nombre</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@C.Id">@C.Nombre</option>
+                                    }
+                                }
+                            </select>
+
+                            <input hidden type="number" name="id" value="@P.Id" />
+                            @if (P.Estado == CadeteriaWeb.Entities.EstadoPedido.En_Camino || P.Estado == CadeteriaWeb.Entities.EstadoPedido.Procesando)
+                            {
+                                <button type="submit" class="btn btn-success"><i class="bi bi-save"></i></button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success" disabled><i class="bi bi-save"></i></button>
+                            }
+
+                        </form>
+                    </td>
 
                     <td>
                         <form asp-action="UpdatePedido" method="post">
