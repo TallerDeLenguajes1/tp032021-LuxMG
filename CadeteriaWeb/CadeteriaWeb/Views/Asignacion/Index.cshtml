@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Asignar cadetes a pedidos";
+}
+
+@*@model CadeteriaWeb.Entities.Cadeteria;*@
+
+<div class="text-center">
+    <h1 class="display-4">Asignacion de cadetes</h1>
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Observacion</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Cadete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (CadeteriaWeb.Entities.TempDB.ObtenerPedidos() != null)
+            {
+                @foreach (var P in CadeteriaWeb.Entities.TempDB.ObtenerPedidos())
+                {
+                    <tr>
+                        <td> @P.Id </td>
+                        <td> @P.Observacion </td>
+                        <td> @P.Estado.ToString() </td>
+                        <td> @P.Cliente.Nombre </td>
+                        <td>
+                            <form asp-action="AsignarCadete" method="post">
+                                <label for="cadetes" hidden>Cadetes:</label>
+                                <select id="cadetes" name="idCadete">
+                                    <option value="0">---Sin asignar---</option>
+                                    @foreach (var C in CadeteriaWeb.Entities.TempDB.ObtenerCadetes())
+                                    {
+                                        @if (P.Cadete != null && P.Cadete.Id == C.Id)
+                                        {
+                                            <option value="@C.Id" selected>@C.Nombre</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@C.Id">@C.Nombre</option>
+                                        }
+                                    }
+                                </select>
+
+                                <input hidden type="number" name="id" value="@P.Id" />
+                                @if (P.Estado == CadeteriaWeb.Entities.EstadoPedido.En_Camino || P.Estado == CadeteriaWeb.Entities.EstadoPedido.Procesando)
+                                {
+                                    <button type="submit" class="btn btn-success"><i class="bi bi-save"></i></button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-success" disabled><i class="bi bi-save"></i></button>
+                                }
+
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+

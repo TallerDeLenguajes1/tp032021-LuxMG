@@ -56,7 +56,7 @@ namespace CadeteriaWeb.Controllers
             cadeteria.OrdenarPedidos();
             cadeteria.GuardarCambiosPedidos();
 
-            return View("Index", cadeteria);
+            return View("Index", cadeteria.ListadoPedidos);
         }
 
         public IActionResult DeletePedido(int id, string confirm)
@@ -74,31 +74,13 @@ namespace CadeteriaWeb.Controllers
             return View("Index", cadeteria.ListadoPedidos);
         }
 
-        public IActionResult AsignarCadete(int id, int idCadete)
-        {
-            Pedido P = cadeteria.BuscarPedidoPorID(id);
-            if (P == null)
-                return View("Index", cadeteria.ListadoPedidos);
-
-            if (idCadete == 0)
-                return View(cadeteria);
-
-            Cadete C = cadeteria.BuscarCadetePorID(idCadete);
-            if (C == null)
-                return View("Index", cadeteria.ListadoPedidos);
-
-            P.AsignarCadete(C);
-            cadeteria.GuardarCambiosPedidos();
-
-            return View("Index", cadeteria.ListadoPedidos);
-        }
-
         public IActionResult EntregarPedido(int id)
         {
             Pedido P = cadeteria.BuscarPedidoPorID(id);
             if (P != null)
                 P.Entregar();
 
+            cadeteria.GuardarCambiosCadetes();
             cadeteria.GuardarCambiosPedidos();
             return View("Index", cadeteria.ListadoPedidos);
         }

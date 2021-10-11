@@ -63,11 +63,11 @@
 
                     @if (P.Cadete == null)
                     {
-                        <td> No asignado </td>
+                        <td> No asignado  <a class="" asp-controller="Asignacion" asp-action="Index"><i class="bi bi-pencil-square"></i></a></td>
                     }
                     else
                     {
-                        <td> @P.Cadete.Nombre </td>
+                        <td> @P.Cadete.Nombre  <a class="" asp-controller="Asignacion" asp-action="Index"><i class="bi bi-pencil-square"></i></a></td>
                     }
 
                     <td>
