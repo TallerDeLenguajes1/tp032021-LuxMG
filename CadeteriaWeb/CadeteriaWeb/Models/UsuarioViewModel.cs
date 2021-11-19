@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CadeteriaWeb.Entities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +16,7 @@ namespace CadeteriaWeb.Models
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar una contraseña")]
-        [StringLength(50, MinimumLength = 6)]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
         [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
@@ -25,7 +26,11 @@ namespace CadeteriaWeb.Models
         [Display(Name = "Reingrese la contraseña")]
         public string PasswordRetry { get; set; }
 
+        [Display(Name = "Error")]
+        public string Message { get; set; }
 
+        public UsuarioCreateViewModel() { }
+        public UsuarioCreateViewModel(string message) { Message = message; }
     }
 
     public class UsuarioLoginViewModel
@@ -39,5 +44,43 @@ namespace CadeteriaWeb.Models
         [StringLength(50, MinimumLength = 6)]
         [Display(Name = "Contraseña")]
         public string Password { get; set; }
+
+        [Display(Name = "Error")]
+        public string Message { get; set; }
+
+        public UsuarioLoginViewModel() { }
+        public UsuarioLoginViewModel(string message) { Message = message; }
+    }
+
+    public class UsuarioUpdateViewModel
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar un nombre de usuario")] 
+        [StringLength(100)] 
+        [Display(Name = "Usuario")] 
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar una contraseña")]
+        [StringLength(50, MinimumLength = 6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
+        [Display(Name = "Contraseña")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar una contraseña")]
+        [Compare("Password", ErrorMessage = "Ambas contraseñas deben ser iguales")]
+        [StringLength(50, MinimumLength = 6)]
+        [Display(Name = "Reingrese la contraseña")]
+        public string PasswordRetry { get; set; }
+
+        public Rol Rol { get; set; }
+    }
+
+    public class UsuarioInfoViewModel
+    {
+        [Display(Name = "Usuario")]
+        public string Username { get; set; }
+
+        [Display(Name = "Rol")]
+        public Rol Rol { get; set; }
     }
 }

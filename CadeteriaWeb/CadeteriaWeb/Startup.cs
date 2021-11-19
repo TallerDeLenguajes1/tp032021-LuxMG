@@ -14,7 +14,7 @@ namespace CadeteriaWeb
 {
     public class Startup
     {
-        public static Cadeteria cadeteria = new Cadeteria();
+        public static DataBase DB;
 
         public Startup(IConfiguration configuration)
         {
@@ -26,8 +26,10 @@ namespace CadeteriaWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper();
-            services.AddSingleton(cadeteria);
+            DataBase DB = new DataBase(Configuration.GetConnectionString("Default"));
+            services.AddSingleton(DB);
+
+            services.AddAutoMapper(typeof(PerfilDeMapeo));
             services.AddSingleton(NLog.LogManager.GetCurrentClassLogger());
             services.AddControllersWithViews();
         }
@@ -50,6 +52,7 @@ namespace CadeteriaWeb
 
             app.UseRouting();
 
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

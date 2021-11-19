@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Iniciar sesion";
+}
+@model CadeteriaWeb.Models.UsuarioLoginViewModel;
+
+
+<div class="text-center">
+    <h1 class="display-4 text-center m-2">Iniciar sesion</h1>
+    <br />
+
+    <div class="form-group">
+        <form class="row m-lg-1 p-lg-1" asp-action="Login" method="post">
+            <div class="col-md-8">
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" type="text" class="form-control">
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="col-md-8">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" type="password" class="form-control">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            @if (Model.Message != "")
+            {
+                <div class="col-md-8 bg-danger">
+                    <label asp-for="Message" class="form-label text-danger"></label>
+                    <input asp-for="Message" type="text" class="form-control" readonly value="@Model.Message">
+                </div>
+            }
+
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Loguearse</button>
+            </div>
+        </form>
+    </div>
+</div>
+

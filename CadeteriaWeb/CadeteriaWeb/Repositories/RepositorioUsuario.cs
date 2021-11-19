@@ -165,5 +165,38 @@ namespace CadeteriaWeb.Repositories
 
             return U;
         }
+
+        public Usuario GetItemByName(string username)
+        {
+            Usuario U = null;
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioName = {username}";
+
+                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        if (!reader.IsDBNull(1))
+                        {
+                            U = new Usuario()
+                            {
+                                Id = Convert.ToInt32(reader["usuarioID"]),
+                                Username = reader["usuarioName"].ToString(),
+                                Password = reader["usuarioPass"].ToString(),
+                                Rol = (Rol)Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
+                                Alta = Convert.ToBoolean(reader["usuarioAlta"])
+                            };
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return U;
+        }
     }
 }
