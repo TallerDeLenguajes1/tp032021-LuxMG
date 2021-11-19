@@ -52,6 +52,7 @@ namespace CadeteriaWeb.Repositories
                                 Id = Convert.ToInt32(reader["usuarioID"]),
                                 Username = reader["usuarioName"].ToString(),
                                 Password = reader["usuarioPass"].ToString(),
+                                Rol = (Rol)Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
                                 Alta = Convert.ToBoolean(reader["usuarioAlta"])
                             };
                             ListadoUsuarios.Add(U);
@@ -85,6 +86,7 @@ namespace CadeteriaWeb.Repositories
                                 Id = Convert.ToInt32(reader["usuarioID"]),
                                 Username = reader["usuarioName"].ToString(),
                                 Password = reader["usuarioPass"].ToString(),
+                                Rol = (Rol)Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
                                 Alta = Convert.ToBoolean(reader["usuarioAlta"])
                             };
                         }
@@ -101,8 +103,8 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"INSERT INTO Usuarios(usuarioID, usuarioName, usuarioPass, usuarioAlta)" +
-                    $" VALUES({item.Id}, {item.Username}, {item.Password}, {item.Alta})";
+                string SQLQuery = $"INSERT INTO Usuarios(usuarioID, usuarioName, usuarioPass, usuarioRol, usuarioAlta)" +
+                    $" VALUES({item.Id}, {item.Username}, {item.Password}, {item.Rol}, {item.Alta})";
 
                 using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
                 {
@@ -119,6 +121,7 @@ namespace CadeteriaWeb.Repositories
                 connection.Open();
                 string SQLQuery = $"UPDATE Usuarios" +
                     $" SET usuarioName = {item.Username}, usuarioPass = {item.Password}," +
+                    $" usuarioRol = {item.Rol}" +
                     $" WHERE usuarioID = {item.Id}";
 
                 using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
@@ -127,6 +130,40 @@ namespace CadeteriaWeb.Repositories
                 }
                 connection.Close();
             }
+        }
+
+        public Usuario Validate(string username, string password)
+        {
+            Usuario U = null;
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string SQLQuery = $"SELECT * FROM Usuarios" +
+                    $" WHERE usuarioName = {username} AND usuarioPass = {password}";
+
+                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        if (!reader.IsDBNull(1))
+                        {
+                            U = new Usuario()
+                            {
+                                Id = Convert.ToInt32(reader["usuarioID"]),
+                                Username = reader["usuarioName"].ToString(),
+                                Password = reader["usuarioPass"].ToString(),
+                                Rol = (Rol) Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
+                                Alta = Convert.ToBoolean(reader["usuarioAlta"])
+                            };
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return U;
         }
     }
 }

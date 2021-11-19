@@ -16,6 +16,7 @@
 
         public Cliente()
         {
+            Alta = true;
         }
 
         public Cliente(int id, string nombre, string direccion, string telefono, bool alta)

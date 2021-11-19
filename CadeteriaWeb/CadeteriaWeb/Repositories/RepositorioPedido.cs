@@ -137,5 +137,45 @@ namespace CadeteriaWeb.Repositories
                 connection.Close();
             }
         }
+
+        public List<Pedido> GetAllByPeopleID(int cadeteID = 0, int clienteID = 0)
+        {
+            List<Pedido> ListadoPedidos = new();
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string SQLQuery = $"SELECT * FROM Pedido WHERE pedidoAlta";
+
+                if (cadeteID != 0) SQLQuery += $" AND cadeteID = {cadeteID}";
+                if (clienteID != 0) SQLQuery += $" AND clienteID = {clienteID}";
+
+                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Cadete C = new RepositorioCadete(connectionString).GetItemById(Convert.ToInt32(reader["cadeteID"]));
+                            Cliente Ci = new RepositorioCliente(connectionString).GetItemById(Convert.ToInt32(reader["clienteID"]));
+
+                            Pedido P = new Pedido()
+                            {
+                                Id = Convert.ToInt32(reader["pedidoID"]),
+                                Observacion = reader["pedidoObs"].ToString(),
+                                Estado = (EstadoPedido)Enum.Parse(typeof(EstadoPedido), reader["pedidoEstado"].ToString()),
+                                Cliente = Ci,
+                                Cadete = C,
+                                Alta = Convert.ToBoolean(reader["pedidoAlta"])
+                            };
+                            ListadoPedidos.Add(P);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return ListadoPedidos;
+        }
     }
 }

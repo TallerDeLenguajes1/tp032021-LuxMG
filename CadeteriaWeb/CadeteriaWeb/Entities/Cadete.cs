@@ -23,6 +23,8 @@ namespace CadeteriaWeb.Entities
 
         public Cadete()
         {
+            Jornal = 0;
+            Alta = true;
         }
 
         public Cadete(string nombre, string direccion, string telefono)

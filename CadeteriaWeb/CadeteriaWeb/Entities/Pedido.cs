@@ -20,6 +20,10 @@
 
         public Pedido()
         {
+            Estado = EstadoPedido.Vacio;
+            Cadete = null;
+            Cliente = null;
+            Alta = true;
         }
 
         public Pedido(string observacion, string nombreCliente, string direccionCliente, string telefonoCliente)

@@ -32,6 +32,13 @@ namespace CadeteriaWeb.Entities
             //    listadoPedidos = new List<Pedido>();
         }
 
+        public Cadeteria(string nombre)
+        {
+            Nombre = nombre;
+        }
+
+
+
         //// ---------------------------- CADETES ----------------------------
         //public void AgregarCadete(Cadete C)
         //{
