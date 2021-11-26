@@ -75,12 +75,4 @@ namespace CadeteriaWeb.Models
         public Rol Rol { get; set; }
     }
 
-    public class UsuarioInfoViewModel
-    {
-        [Display(Name = "Usuario")]
-        public string Username { get; set; }
-
-        [Display(Name = "Rol")]
-        public Rol Rol { get; set; }
-    }
 }

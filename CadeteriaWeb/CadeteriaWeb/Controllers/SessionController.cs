@@ -35,14 +35,19 @@ namespace CadeteriaWeb.Controllers
                 : "NOTLOGUED";
 
         }
+
         internal string GetUser()
         {
             return HttpContext.Session.GetString("Username");
         }
+
         internal int GetIdUsuario()
         {
-            return (int)HttpContext.Session.GetInt32("UserID");
+            return IsSesionIniciada()
+                ? (int)HttpContext.Session.GetInt32("UserID")
+                : 0;
         }
+
         internal void Logout()
         {
             HttpContext.Session.Remove("Username");

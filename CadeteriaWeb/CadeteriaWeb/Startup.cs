@@ -32,6 +32,13 @@ namespace CadeteriaWeb
             services.AddAutoMapper(typeof(PerfilDeMapeo));
             services.AddSingleton(NLog.LogManager.GetCurrentClassLogger());
             services.AddControllersWithViews();
+           
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(60*60*24);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

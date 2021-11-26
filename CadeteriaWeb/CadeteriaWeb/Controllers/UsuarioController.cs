@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace CadeteriaWeb.Controllers
 {
-    public class LoginController : SessionController
+    public class UsuarioController : SessionController
     {
         private readonly DataBase DB;
         private readonly Logger nlog;
         private readonly IMapper mapper;
 
-        public LoginController(DataBase DB, Logger nlog, IMapper mapper)
+        public UsuarioController(DataBase DB, Logger nlog, IMapper mapper)
         {
             this.DB = DB;
             this.nlog = nlog;
@@ -76,6 +76,8 @@ namespace CadeteriaWeb.Controllers
                 return View("Login");
             }        
         }
+        // -------------------------REGISTRO USUARIOS-------------------------
+        // GET: Usuario/Register
 
         // -------------------------CARGA USUARIOS-------------------------
         // GET: Usuario/CreateUsuario
@@ -134,6 +136,7 @@ namespace CadeteriaWeb.Controllers
                     {
                         DB.RepoUsuario.Delete(id);
                         nlog.Info($"DELETE DE USUARIO - ID:{U.Id}, USERNAME:{U.Username}, ROL:{U.Rol}");
+                        if (GetIdUsuario() == id) Logout();
                     }   
                     
                 }

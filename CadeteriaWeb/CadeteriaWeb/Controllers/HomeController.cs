@@ -13,18 +13,17 @@ namespace CadeteriaWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Cadeteria cadeteria;
         private readonly Logger nlog;
 
-        public HomeController(Logger nlog, Cadeteria cadeteria)
+        public HomeController(Logger nlog)
         {
             this.nlog = nlog;
-            this.cadeteria = cadeteria;
+            
         }
 
         public IActionResult Index()
         {
-            return View(cadeteria);
+            return View();
         }
 
         public IActionResult Privacy()

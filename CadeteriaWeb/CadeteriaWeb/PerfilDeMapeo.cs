@@ -20,6 +20,12 @@ namespace CadeteriaWeb
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
 
+            CreateMap<Usuario, UsuarioUpdateViewModel>().ReverseMap()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(dest => dest.Rol, opt => opt.MapFrom(src => src.Rol));
+
 
 
             //CreateMap<Cadete, CadeteViewModel>().ReverseMap();
