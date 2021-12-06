@@ -14,8 +14,6 @@ namespace CadeteriaWeb
 {
     public class Startup
     {
-        public static DataContext DB;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

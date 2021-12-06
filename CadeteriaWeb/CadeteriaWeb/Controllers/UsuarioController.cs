@@ -142,11 +142,11 @@ namespace CadeteriaWeb.Controllers
 
                 if (GetRol() == "ADMIN" || GetIdUsuario() == id)
                 {
-                    Usuario U = DB.Usuario.GetUsuarioById(id);
+                    Usuario U = DB.Usuarios.GetUsuarioById(id);
 
                     if (U != null)
                     {
-                        DB.Usuario.DeleteUsuario(id);
+                        DB.Usuarios.DeleteUsuario(id);
                         nlog.Info($"DELETE DE USUARIO - ID:{U.Id}, USERNAME:{U.Username}, ROL:{U.Rol}");
                         if (GetIdUsuario() == id) Logout();
                     }   
@@ -173,7 +173,7 @@ namespace CadeteriaWeb.Controllers
 
                 if (GetRol() == "ADMIN" || GetIdUsuario() == id)
                 {
-                    Usuario U = DB.Usuario.GetUsuarioById(id);
+                    Usuario U = DB.Usuarios.GetUsuarioById(id);
                     if (U != null)
                         return View(mapper.Map<UsuarioUpdateViewModel>(U));
                 }
@@ -200,7 +200,7 @@ namespace CadeteriaWeb.Controllers
                     {
                         Usuario U = mapper.Map<Usuario>(usuario);
 
-                        DB.Usuario.UpdateUsuario(U);
+                        DB.Usuarios.UpdateUsuario(U);
                         nlog.Info($"UPDATE DE USUARIO - ID:{U.Id}, USERNAME:{U.Username}, ROL:{U.Rol}");
                     }
                 }
