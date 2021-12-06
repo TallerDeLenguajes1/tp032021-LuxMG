@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CadeteriaWeb.Entities;
 using CadeteriaWeb.Models;
+using CadeteriaWeb.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
@@ -13,11 +14,11 @@ namespace CadeteriaWeb.Controllers
 {
     public class UsuarioController : SessionController
     {
-        private readonly DataBase DB;
+        private readonly DataContext DB;
         private readonly Logger nlog;
         private readonly IMapper mapper;
 
-        public UsuarioController(DataBase DB, Logger nlog, IMapper mapper)
+        public UsuarioController(DataContext DB, Logger nlog, IMapper mapper)
         {
             this.DB = DB;
             this.nlog = nlog;
@@ -31,7 +32,7 @@ namespace CadeteriaWeb.Controllers
             if (GetRol() == "ADMIN")
                 return View(DB);
 
-            return View("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         // -------------------------LOGUEO USUARIOS-------------------------
@@ -41,43 +42,54 @@ namespace CadeteriaWeb.Controllers
             if (!IsSesionIniciada())
                 return View(new UsuarioLoginViewModel(message));
 
-            return View("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
-        // POST: Usuario/Login
+        // POST: Usuario/LoginPost
         [HttpPost]
-        public IActionResult Login(UsuarioLoginViewModel usuario)
+        public IActionResult LoginPost(UsuarioLoginViewModel usuario)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Usuario U = DB.RepoUsuario.Validate(usuario.Username, usuario.Password);
+                    Usuario U = DB.Usuarios.Validate(usuario.Username, usuario.Password);
                     
                     if (U != null)
                     {
                         SetSesion(U);
                         nlog.Info($"LOGUEO DE USUARIO - ID:{U.Id}, USERNAME:{U.Username}, ROL:{U.Rol}");
 
-                        return View("Index", "Home");
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        string message = "Usuario o contraseña incorrectos";
-                        View("Login", message);
+                        string message = "No existe un usuario con ese nombre";
+
+                        if (DB.Usuarios.GetUsuarioByName(usuario.Username) != null)
+                            message = "Contraseña incorrecta";
+                        
+                        return RedirectToAction("Login", message);
                     }
                 }
 
-                return View("Login");
+                return RedirectToAction("Login");
             }
             catch (Exception e)
             {
                 nlog.Error($"ERROR EN LOGUEO DE USUARIO - EXCEPTION:{e.Message}");
-                return View("Login");
+                return RedirectToAction("Login");
             }        
         }
         // -------------------------REGISTRO USUARIOS-------------------------
         // GET: Usuario/Register
+        public IActionResult Register(string message = "")
+        {
+            if (!IsSesionIniciada())
+                return View(new UsuarioCreateViewModel(message)); // el registro utiliza como metodo post el CreateUsuarioPost
+
+            return RedirectToAction("Index", "Home");
+        }
 
         // -------------------------CARGA USUARIOS-------------------------
         // GET: Usuario/CreateUsuario
@@ -86,19 +98,19 @@ namespace CadeteriaWeb.Controllers
             return View(new UsuarioCreateViewModel(message));
         }
 
-        // POST: Usuario/CreateUsuario
+        // POST: Usuario/CreateUsuarioPost
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateUsuario(UsuarioCreateViewModel usuario)
+        public IActionResult CreateUsuarioPost(UsuarioCreateViewModel usuario)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (DB.RepoUsuario.GetItemByName(usuario.Username) == null)
+                    if (DB.Usuarios.GetUsuarioByName(usuario.Username) != null)
                     {
                         string message = "Ya existe un usuario con ese nombre";
-                        return View("CreateUsuario", message);
+                        return RedirectToAction("CreateUsuario", message);
                     }
                         
                     Usuario U = mapper.Map<Usuario>(usuario);
@@ -106,16 +118,16 @@ namespace CadeteriaWeb.Controllers
 
                     nlog.Info($"CREACION DE USUARIO - USERNAME:{U.Username}");
 
-                    DB.RepoUsuario.Insert(U);
-                    return View("Login");
+                    DB.Usuarios.InsertUsuario(U);
+                    return RedirectToAction("Login");
                 }
 
-                return View("CreateUsuario");
+                return RedirectToAction("CreateUsuario");
             }
             catch (Exception e)
             {
                 nlog.Error($"ERROR EN CREACION DE USUARIO - EXCEPTION:{e.Message}");
-                return View("Index");
+                return RedirectToAction("Index");
             }
         }
 
@@ -126,27 +138,27 @@ namespace CadeteriaWeb.Controllers
             try
             {
                 if (id == 0)
-                    return View("Index");
+                    return RedirectToAction("Index");
 
                 if (GetRol() == "ADMIN" || GetIdUsuario() == id)
                 {
-                    Usuario U = DB.RepoUsuario.GetItemById(id);
+                    Usuario U = DB.Usuario.GetUsuarioById(id);
 
                     if (U != null)
                     {
-                        DB.RepoUsuario.Delete(id);
+                        DB.Usuario.DeleteUsuario(id);
                         nlog.Info($"DELETE DE USUARIO - ID:{U.Id}, USERNAME:{U.Username}, ROL:{U.Rol}");
                         if (GetIdUsuario() == id) Logout();
                     }   
                     
                 }
                 
-                return View("Login");
+                return RedirectToAction("Login");
             }
             catch (Exception e)
             {
                 nlog.Error($"ERROR EN DELETE DE USUARIO - EXCEPTION:{e.Message}");
-                return View("Index");
+                return RedirectToAction("Index");
             }
         }
 
@@ -157,28 +169,28 @@ namespace CadeteriaWeb.Controllers
             try
             {
                 if (id == 0)
-                    return View("Index");
+                    return RedirectToAction("Index");
 
                 if (GetRol() == "ADMIN" || GetIdUsuario() == id)
                 {
-                    Usuario U = DB.RepoUsuario.GetItemById(id);
+                    Usuario U = DB.Usuario.GetUsuarioById(id);
                     if (U != null)
                         return View(mapper.Map<UsuarioUpdateViewModel>(U));
                 }
                 
-                return View("Index");
+                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
                 nlog.Error($"ERROR EN UPDATE DE USUARIO - EXCEPTION:{e.Message}");
-                return View("Index");
+                return RedirectToAction("Index");
             }
         }
 
-        // POST: Usuario/UpdateUsuario
+        // POST: Usuario/UpdateUsuarioPost
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateUsuario(UsuarioUpdateViewModel usuario)
+        public IActionResult UpdateUsuarioPost(UsuarioUpdateViewModel usuario)
         {
             try
             {
@@ -188,17 +200,17 @@ namespace CadeteriaWeb.Controllers
                     {
                         Usuario U = mapper.Map<Usuario>(usuario);
 
-                        DB.RepoUsuario.Update(U);
+                        DB.Usuario.UpdateUsuario(U);
                         nlog.Info($"UPDATE DE USUARIO - ID:{U.Id}, USERNAME:{U.Username}, ROL:{U.Rol}");
                     }
                 }
 
-                return View("UpdateUsuario", usuario.Id);
+                return RedirectToAction("UpdateUsuario", usuario.Id);
             }
             catch (Exception e)
             {
                 nlog.Error($"ERROR EN UPDATE DE USUARIO - EXCEPTION:{e.Message}");
-                return View("Index");
+                return RedirectToAction("Index");
             }
         }
     }

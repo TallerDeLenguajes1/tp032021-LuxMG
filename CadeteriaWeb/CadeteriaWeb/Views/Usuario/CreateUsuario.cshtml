@@ -4,39 +4,49 @@
 @model CadeteriaWeb.Models.UsuarioCreateViewModel;
 
 
-<div class="text-center">
-    <h1 class="display-4 text-center m-2">Iniciar sesion</h1>
-    <br />
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
 
-    <div class="form-group">
-        <form class="row m-lg-1 p-lg-1" asp-action="CreateUsuario" method="post">
-            <div class="col-md-8">
-                <label asp-for="Username" class="form-label"></label>
-                <input asp-for="Username" type="text" class="form-control">
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-            <div class="col-md-8">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" type="password" class="form-control">
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="col-md-8">
-                <label asp-for="PasswordRetry" class="form-label"></label>
-                <input asp-for="PasswordRetry" type="password" class="form-control">
-                <span asp-validation-for="PasswordRetry" class="text-danger"></span>
-            </div>
-            @if (Model.Message != "")
-            {
-                <div class="col-md-8 bg-danger">
-                    <label asp-for="Message" class="form-label text-danger"></label>
-                    <input asp-for="Message" type="text" class="form-control" readonly value="@Model.Message">
+                        <h3 class="mb-5">Crear usuario</h3>
+
+                        <form class="row m-lg-1 p-lg-1" asp-action="CreateUsuarioPost" method="post">
+                            <div class="form-outline mb-4">
+                                <label asp-for="Username" class="form-label"></label>
+                                <input asp-for="Username" type="text" class="form-control">
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" type="password" class="form-control">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label asp-for="PasswordRetry" class="form-label"></label>
+                                <input asp-for="PasswordRetry" type="password" class="form-control">
+                                <span asp-validation-for="PasswordRetry" class="text-danger"></span>
+                            </div>
+
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Crear usuario</button>
+
+                            @if (Model.Message != null && Model.Message != "")
+                            {
+                                <hr class="my-4">
+
+                                <div class="form-outline mb-4 bg-danger alert-danger">
+                                    <label asp-for="Message" class="form-label text-danger"></label>
+                                    <input asp-for="Message" type="text" class="form-control" readonly value="@Model.Message">
+                                </div>
+                            }
+
+                        </form>
+
+                    </div>
                 </div>
-            }
-
-            <div class="col-12">
-                <button class="btn btn-primary" type="submit">Crear usuario</button>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
+</section>

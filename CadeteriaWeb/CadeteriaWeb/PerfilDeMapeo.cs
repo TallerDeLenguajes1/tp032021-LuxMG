@@ -12,20 +12,10 @@ namespace CadeteriaWeb
     {
         public PerfilDeMapeo()
         {
-            CreateMap<Usuario, UsuarioLoginViewModel>().ReverseMap()
-                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
-
-            CreateMap<Usuario, UsuarioCreateViewModel>().ReverseMap()
-                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
-
-            CreateMap<Usuario, UsuarioUpdateViewModel>().ReverseMap()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
-                .ForMember(dest => dest.Rol, opt => opt.MapFrom(src => src.Rol));
-
+            // --------------------MAPEO DE USUARIOS--------------------
+            CreateMap<Usuario, UsuarioLoginViewModel>().ReverseMap();
+            CreateMap<Usuario, UsuarioCreateViewModel>().ReverseMap();
+            CreateMap<Usuario, UsuarioUpdateViewModel>().ReverseMap();
 
 
             //CreateMap<Cadete, CadeteViewModel>().ReverseMap();

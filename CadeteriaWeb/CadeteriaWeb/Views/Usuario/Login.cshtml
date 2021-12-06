@@ -13,7 +13,7 @@
 
                         <h3 class="mb-5">Iniciar sesion</h3>
 
-                        <form asp-action="Login" method="post">
+                        <form asp-action="LoginPost" method="post">
                             <div class="form-outline mb-4">
                                 <label asp-for="Username" class="form-label"></label>
                                 <input asp-for="Username" type="text" class="form-control form-control-lg">
@@ -26,21 +26,23 @@
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
 
-                            @if (Model.Message != null && Model.Message != "")
-                            {
-                                <div class="form-outline mb-4 bg-danger">
-                                    <label asp-for="Message" class="form-label text-danger"></label>
-                                    <input asp-for="Message" type="text" class="form-control" readonly value="@Model.Message">
-                                </div>
-                            }
-
                             <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
 
                             <hr class="my-4">
 
                             <div>
-                                <p class="mb-0">Aún no te registraste? <a asp-action="CreateUsuario" class="fw-bold">Hazlo ahora!</a></p>
+                                <p class="mb-0">Aún no te registraste? <a asp-action="Register" class="fw-bold">Hazlo ahora!</a></p>
                             </div>
+
+                            @if (Model.Message != null && Model.Message != "")
+                            {
+                                <hr class="my-4">
+
+                                <div class="form-outline mb-4 bg-danger">
+                                    <label asp-for="Message" class="form-label text-danger"></label>
+                                    <input asp-for="Message" type="text" class="form-control" readonly value="@Model.Message">
+                                </div>
+                            }
 
                         </form>
 

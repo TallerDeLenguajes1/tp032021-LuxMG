@@ -1,4 +1,4 @@
-﻿using CadeteriaWeb.Entities;
+﻿using CadeteriaWeb.Repositories;
 using CadeteriaWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

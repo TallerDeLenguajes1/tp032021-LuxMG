@@ -1,4 +1,4 @@
-using CadeteriaWeb.Entities;
+using CadeteriaWeb.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,7 +14,7 @@ namespace CadeteriaWeb
 {
     public class Startup
     {
-        public static DataBase DB;
+        public static DataContext DB;
 
         public Startup(IConfiguration configuration)
         {
@@ -26,13 +26,25 @@ namespace CadeteriaWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            DataBase DB = new DataBase(Configuration.GetConnectionString("Default"));
-            services.AddSingleton(DB);
+            RepositorioCadeteSQL repoCadetes =
+                    new RepositorioCadeteSQL(
+                        Configuration.GetConnectionString("Default"));
+            RepositorioClienteSQL repoClientes =
+                    new RepositorioClienteSQL(
+                        Configuration.GetConnectionString("Default"));
+            RepositorioPedidoSQL repoPedidos =
+                    new RepositorioPedidoSQL(
+                        Configuration.GetConnectionString("Default"));
+            RepositorioUsuarioSQL repoUsuarios =
+                    new RepositorioUsuarioSQL(
+                        Configuration.GetConnectionString("Default"));
+
+            DataContext data = new DataContext(repoCadetes, repoClientes, repoPedidos, repoUsuarios);
+            services.AddSingleton(data);
 
             services.AddAutoMapper(typeof(PerfilDeMapeo));
             services.AddSingleton(NLog.LogManager.GetCurrentClassLogger());
             services.AddControllersWithViews();
-           
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(60*60*24);
