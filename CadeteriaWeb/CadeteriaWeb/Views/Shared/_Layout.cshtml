@@ -14,40 +14,62 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-4">
             <div class="container">
+
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">CadeteriaWeb</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item m-3">
                             <div class="btn-group">
-                                <a class="btn btn-outline-dark" asp-controller="Pedido" asp-action="Index">Pedidos</a>
+                                <a class="btn btn-outline-dark" asp-controller="Pedidos" asp-action="Index">Pedidos</a>
                                 <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-controller="Pedido" asp-action="CreatePedido">Cargar pedido</a>
+                                    <a class="dropdown-item" asp-controller="Pedidos" asp-action="CreatePedido">Cargar pedido</a>
                                 </div>
                             </div>
                         </li>
 
                         <li class="nav-item m-3">
                             <div class="btn-group">
-                                <a class="btn btn-outline-dark" asp-controller="Cadete" asp-action="Index">Cadetes</a>
+                                <a class="btn btn-outline-dark" asp-controller="Cadetes" asp-action="Index">Cadetes</a>
                                 <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-controller="Cadete" asp-action="CreateCadete">Cargar cadete</a>
+                                    <a class="dropdown-item" asp-controller="Cadetes" asp-action="CreateCadete">Cargar cadete</a>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item m-3">
+                            <div class="btn-group">
+                                <a class="btn btn-outline-dark" asp-controller="Usuarios" asp-action="IndexAdmin">Usuarios</a>
+                                <button type="button" class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-controller="Usuarios" asp-action="CreateUsuario">Cargar usuario</a>
+                                    <a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">Ver mi usuario</a>
                                 </div>
                             </div>
                         </li>
 
                     </ul>
                 </div>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-around float-right">
+                    <a class="btn btn-outline-dark" asp-controller="Usuarios" asp-action="Register">Registrarse</a>
+                    <a class="btn btn-outline-dark" asp-controller="Usuarios" asp-action="Login">Iniciar sesion</a>
+                    <a class="btn btn-outline-dark" asp-controller="Usuarios" asp-action="CerrarSesion">Logout</a>
+                </div>
+
             </div>
         </nav>
     </header>
@@ -65,7 +87,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>*@
-    @*@await RenderSectionAsync("Scripts", required: false)*@
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

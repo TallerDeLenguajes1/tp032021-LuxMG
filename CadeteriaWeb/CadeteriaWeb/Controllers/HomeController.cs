@@ -13,11 +13,11 @@ namespace CadeteriaWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Logger nlog;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(Logger nlog)
+        public HomeController(ILogger<HomeController> logger)
         {
-            this.nlog = nlog;
+            this._logger = logger;
             
         }
 

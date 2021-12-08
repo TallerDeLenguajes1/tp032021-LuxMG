@@ -11,6 +11,7 @@ namespace CadeteriaWeb.Repositories
         void DeleteCadete(int id);
         List<Cadete> GetAllCadetes();
         Cadete GetCadeteById(int id);
+        Cadete GetCadeteByName(string nombre);
         void InsertCadete(Cadete item);
         void UpdateCadete(Cadete item);
     }

@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Lista de Usuarios";
 }
-@model CadeteriaWeb.Entities.DataBase;
+@model CadeteriaWeb.Repositories.DataContext;
 
 <h1>Listado de usuarios</h1>
 
@@ -21,12 +21,12 @@
                 Rol
             </th>
             <th>
-                Editar|Borrar
+                Editar | Borrar
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.RepoUsuario.GetAllUsuarios())
+        @foreach (var item in Model.Usuarios.GetAllUsuarios())
         {
             <tr>
                 <td>

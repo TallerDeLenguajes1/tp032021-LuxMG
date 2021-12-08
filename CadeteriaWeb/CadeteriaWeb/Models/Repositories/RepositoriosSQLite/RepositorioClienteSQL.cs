@@ -1,4 +1,5 @@
 ﻿using CadeteriaWeb.Entities;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -10,28 +11,85 @@ namespace CadeteriaWeb.Repositories
     public class RepositorioClienteSQL : IRepositorioCliente
     {
         private readonly string connectionString;
+        private readonly Logger log;
 
-        public RepositorioClienteSQL(string connection)
+        public RepositorioClienteSQL(string connection, Logger log)
         {
             this.connectionString = connection;
+            this.log = log;
         }
 
+        // -----------------------------------------------------------------
+        // -------------------------DELETE CLIENTE--------------------------
+        // -----------------------------------------------------------------
         public void DeleteCliente(int id)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"UPDATE Clientes" +
-                    $" SET clienteAlta = false WHERE clienteID = {id}";
+                string SQLQuery = $"UPDATE Clientes SET clienteAlta = 0 WHERE clienteID = @id;";
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@id", id);
+
+                command.ExecuteNonQuery();
                 connection.Close();
+                connection.Dispose();
             }
         }
 
+
+        // -----------------------------------------------------------------
+        // -------------------------INSERT CLIENTE--------------------------
+        // -----------------------------------------------------------------
+        public void InsertCliente(Cliente item)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string SQLQuery = $"INSERT INTO Clientes(clienteNombre, clienteDireccion, clienteTelefono, clienteAlta)" +
+                    $" VALUES(@nombre, @direccion, @telefono, 1);";
+
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@nombre", item.Nombre);
+                command.Parameters.AddWithValue("@direccion", item.Direccion);
+                command.Parameters.AddWithValue("@telefono", item.Telefono);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+                connection.Dispose();
+            }
+        }
+
+
+        // -----------------------------------------------------------------
+        // -------------------------UPDATE CLIENTE--------------------------
+        // -----------------------------------------------------------------
+        public void UpdateCliente(Cliente item)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string SQLQuery = $"UPDATE Clientes" +
+                    $" SET clienteNombre = @nombre, clienteDireccion = @direccion, clienteTelefono = @telefono" +
+                    $" WHERE clienteID = @id";
+
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@id", item.Id);
+                command.Parameters.AddWithValue("@nombre", item.Nombre);
+                command.Parameters.AddWithValue("@direccion", item.Direccion);
+                command.Parameters.AddWithValue("@telefono", item.Telefono);
+
+                command.ExecuteNonQuery();
+                connection.Close();
+                connection.Dispose();
+            }
+        }
+
+
+        // -----------------------------------------------------------------
+        // ---------------------------GET CLIENTES--------------------------
+        // -----------------------------------------------------------------
         public List<Cliente> GetAllClientes()
         {
             List<Cliente> ListadoClientes = new();
@@ -57,9 +115,11 @@ namespace CadeteriaWeb.Repositories
                             };
                             ListadoClientes.Add(C);
                         }
+                        reader.Close();
                     }
                 }
                 connection.Close();
+                connection.Dispose();
             }
 
             return ListadoClientes;
@@ -72,64 +132,63 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"SELECT * FROM Clientes WHERE clienteID = {id}";
+                string SQLQuery = $"SELECT * FROM Clientes WHERE clienteAlta AND clienteID = @id";
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@id", id);
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                var reader = command.ExecuteReader();
+
+                reader.Read();
+                if (reader.HasRows)
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    C = new Cliente()
                     {
-                        reader.Read();
-                        if (!reader.IsDBNull(1))
-                        {
-                            C = new Cliente()
-                            {
-                                Id = Convert.ToInt32(reader["clienteID"]),
-                                Nombre = reader["clienteNombre"].ToString(),
-                                Direccion = reader["clienteDireccion"].ToString(),
-                                Telefono = reader["clienteTelefono"].ToString(),
-                                Alta = Convert.ToBoolean(reader["clienteAlta"])
-                            };
-                        }
-                    }
+                        Id = Convert.ToInt32(reader["clienteID"]),
+                        Nombre = reader["clienteNombre"].ToString(),
+                        Direccion = reader["clienteDireccion"].ToString(),
+                        Telefono = reader["clienteTelefono"].ToString(),
+                        Alta = Convert.ToBoolean(reader["clienteAlta"])
+                    };
                 }
+                reader.Close();
                 connection.Close();
+                connection.Dispose();
             }
 
             return C;
         }
 
-        public void InsertCliente(Cliente item)
+        public Cliente GetClienteByName(string nombre)
         {
+            Cliente C = null;
+
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"INSERT INTO Clientes(clienteID, clienteNombre, clienteDireccion, clienteTelefono, clienteAlta)" +
-                    $" VALUES({item.Id}, {item.Nombre}, {item.Direccion}, {item.Telefono}, {item.Alta})";
+                string SQLQuery = $"SELECT * FROM Clientes WHERE clienteAlta AND clienteNombre = @nombre";
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@nombre", nombre);
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                var reader = command.ExecuteReader();
+
+                reader.Read();
+                if (reader.HasRows)
                 {
-                    command.ExecuteNonQuery();
+                    C = new Cliente()
+                    {
+                        Id = Convert.ToInt32(reader["clienteID"]),
+                        Nombre = reader["clienteNombre"].ToString(),
+                        Direccion = reader["clienteDireccion"].ToString(),
+                        Telefono = reader["clienteTelefono"].ToString(),
+                        Alta = Convert.ToBoolean(reader["clienteAlta"])
+                    };
                 }
+                reader.Close();
                 connection.Close();
+                connection.Dispose();
             }
-        }
 
-        public void UpdateCliente(Cliente item)
-        {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                string SQLQuery = $"UPDATE Clientes" +
-                    $" SET clienteNombre = {item.Nombre}, clienteDireccion = {item.Direccion}," +
-                    $" clienteTelefono = {item.Telefono}" +
-                    $" WHERE clienteID = {item.Id}";
-
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
+            return C;
         }
     }
 }

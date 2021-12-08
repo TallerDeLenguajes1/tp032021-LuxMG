@@ -11,34 +11,35 @@
                 <div class="card shadow-2-strong" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
 
-                        <h3 class="mb-5">Registro</h3>
+                        <h3 class="mb-5">Registrarse</h3>
 
-                        <form class="row m-lg-1 p-lg-1" asp-action="CreateUsuarioPost" method="post">
+                        <form asp-action="RegisterPost" method="post">
                             <div class="form-outline mb-4">
                                 <label asp-for="Username" class="form-label"></label>
-                                <input asp-for="Username" type="text" class="form-control">
+                                <input asp-for="Username" type="text" class="form-control form-control-lg">
                                 <span asp-validation-for="Username" class="text-danger"></span>
                             </div>
+
                             <div class="form-outline mb-4">
                                 <label asp-for="Password" class="form-label"></label>
-                                <input asp-for="Password" type="password" class="form-control">
+                                <input asp-for="Password" type="password" class="form-control form-control-lg">
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
+
                             <div class="form-outline mb-4">
                                 <label asp-for="PasswordRetry" class="form-label"></label>
-                                <input asp-for="PasswordRetry" type="password" class="form-control">
+                                <input asp-for="PasswordRetry" type="password" class="form-control form-control-lg">
                                 <span asp-validation-for="PasswordRetry" class="text-danger"></span>
                             </div>
 
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">Registrarse</button>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Enviar</button>
 
                             @if (Model.Message != null && Model.Message != "")
                             {
                                 <hr class="my-4">
 
-                                <div class="form-outline mb-4 bg-danger alert-danger">
-                                    <label asp-for="Message" class="form-label text-danger"></label>
-                                    <input asp-for="Message" type="text" class="form-control" readonly value="@Model.Message">
+                                <div class="alert alert-danger">
+                                    <strong>Error!</strong> @Model.Message
                                 </div>
                             }
 

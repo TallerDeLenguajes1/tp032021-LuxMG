@@ -39,7 +39,9 @@ namespace CadeteriaWeb.Controllers
 
         internal string GetUser()
         {
-            return HttpContext.Session.GetString("Username");
+            return IsSesionIniciada()
+                ? HttpContext.Session.GetString("Username")
+                : null;
         }
 
         internal int GetIdUsuario()

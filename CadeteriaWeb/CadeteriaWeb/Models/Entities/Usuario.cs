@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CadeteriaWeb.Entities
+﻿namespace CadeteriaWeb.Entities
 {
     public enum Rol { ADMIN, USER, NOTLOGUED };
 

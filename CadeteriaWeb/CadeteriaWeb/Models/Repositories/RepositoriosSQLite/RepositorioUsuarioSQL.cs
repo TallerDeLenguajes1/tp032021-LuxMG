@@ -1,4 +1,5 @@
 ﻿using CadeteriaWeb.Entities;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -10,62 +11,83 @@ namespace CadeteriaWeb.Repositories
     public class RepositorioUsuarioSQL : IRepositorioUsuario
     {
         private readonly string connectionString;
+        private readonly Logger log;
 
-        public RepositorioUsuarioSQL(string connection)
+        public RepositorioUsuarioSQL(string connection, Logger log)
         {
             this.connectionString = connection;
+            this.log = log;
         }
 
+        // -----------------------------------------------------------------
+        // -------------------------DELETE USUARIO--------------------------
+        // -----------------------------------------------------------------
         public void DeleteUsuario(int id)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"UPDATE Usuarios" +
-                    $" SET usuarioAlta = false WHERE usuarioID = {id}";
+                string SQLQuery = $"UPDATE Usuarios SET usuarioAlta = 0 WHERE usuarioID = @id;";
+                
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@id", id);
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+                command.ExecuteNonQuery();
                 connection.Close();
+                connection.Dispose();
             }
         }
 
+
+        // -----------------------------------------------------------------
+        // -------------------------INSERT USUARIO--------------------------
+        // -----------------------------------------------------------------
         public void InsertUsuario(Usuario item)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"INSERT INTO Usuarios(usuarioID, usuarioName, usuarioPass, usuarioRol, usuarioAlta)" +
-                    $" VALUES({item.Id}, {item.Username}, {item.Password}, {item.Rol}, {item.Alta})";
+                string SQLQuery = $"INSERT INTO Usuarios(usuarioName, usuarioPass, usuarioRol, usuarioAlta)" +
+                    $" VALUES(@username, @password, 'USER', 1);";
+                
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@username", item.Username);
+                command.Parameters.AddWithValue("@password", item.Password);
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+                command.ExecuteNonQuery();
                 connection.Close();
+                connection.Dispose();
             }
         }
 
+
+        // -----------------------------------------------------------------
+        // -------------------------UPDATE USUARIO--------------------------
+        // -----------------------------------------------------------------
         public void UpdateUsuario(Usuario item)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
                 string SQLQuery = $"UPDATE Usuarios" +
-                    $" SET usuarioName = {item.Username}, usuarioPass = {item.Password}," +
-                    $" usuarioRol = {item.Rol}" +
-                    $" WHERE usuarioID = {item.Id}";
+                    $" SET usuarioName = @username, usuarioPass = @password" +
+                    $" WHERE usuarioID = @id";
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@id", item.Id);
+                command.Parameters.AddWithValue("@username", item.Username);
+                command.Parameters.AddWithValue("@password", item.Password);
+
+                command.ExecuteNonQuery();
                 connection.Close();
+                connection.Dispose();
             }
         }
 
+
+        // -----------------------------------------------------------------
+        // -------------------------VALIDATE USUARIO------------------------
+        // -----------------------------------------------------------------
         public Usuario Validate(string username, string password)
         {
             Usuario U = null;
@@ -73,33 +95,38 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"SELECT * FROM Usuarios" +
-                    $" WHERE usuarioName = {username} AND usuarioPass = {password}";
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioAlta AND usuarioName = @username AND usuarioPass = @password;";
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@username", username);
+                command.Parameters.AddWithValue("@password", password);
+
+                var reader = command.ExecuteReader();
+
+                reader.Read();
+                if (reader.HasRows)
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    U = new Usuario()
                     {
-                        reader.Read();
-                        if (!reader.IsDBNull(1))
-                        {
-                            U = new Usuario()
-                            {
-                                Id = Convert.ToInt32(reader["usuarioID"]),
-                                Username = reader["usuarioName"].ToString(),
-                                Password = reader["usuarioPass"].ToString(),
-                                Rol = (Rol) Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
-                                Alta = Convert.ToBoolean(reader["usuarioAlta"])
-                            };
-                        }
-                    }
+                        Id = Convert.ToInt32(reader["usuarioID"]),
+                        Username = reader["usuarioName"].ToString(),
+                        Password = reader["usuarioPass"].ToString(),
+                        Rol = (Rol) Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
+                        Alta = Convert.ToBoolean(reader["usuarioAlta"])
+                    };
                 }
+                reader.Close();
                 connection.Close();
+                connection.Dispose();
             }
 
             return U;
         }
 
+
+        // -----------------------------------------------------------------
+        // ---------------------------GET USUARIOS--------------------------
+        // -----------------------------------------------------------------
         public List<Usuario> GetAllUsuarios()
         {
             List<Usuario> ListadoUsuarios = new();
@@ -125,9 +152,11 @@ namespace CadeteriaWeb.Repositories
                             };
                             ListadoUsuarios.Add(U);
                         }
+                        reader.Close();
                     }
                 }
                 connection.Close();
+                connection.Dispose();
             }
 
             return ListadoUsuarios;
@@ -140,27 +169,27 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioID = {id}";
+                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioAlta AND usuarioID = @id";
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@id", id);
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                var reader = command.ExecuteReader();
+
+                reader.Read();
+                if (reader.HasRows)
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    U = new Usuario()
                     {
-                        reader.Read();
-                        if (!reader.IsDBNull(1))
-                        {
-                            U = new Usuario()
-                            {
-                                Id = Convert.ToInt32(reader["usuarioID"]),
-                                Username = reader["usuarioName"].ToString(),
-                                Password = reader["usuarioPass"].ToString(),
-                                Rol = (Rol)Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
-                                Alta = Convert.ToBoolean(reader["usuarioAlta"])
-                            };
-                        }
-                    }
+                        Id = Convert.ToInt32(reader["usuarioID"]),
+                        Username = reader["usuarioName"].ToString(),
+                        Password = reader["usuarioPass"].ToString(),
+                        Rol = (Rol)Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
+                        Alta = Convert.ToBoolean(reader["usuarioAlta"])
+                    };
                 }
+                reader.Close();
                 connection.Close();
+                connection.Dispose();
             }
 
             return U;
@@ -173,27 +202,27 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioName = {username}";
+                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioAlta AND usuarioName = @username";
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                command.Parameters.AddWithValue("@username", username);
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                var reader = command.ExecuteReader();
+
+                reader.Read();
+                if (reader.HasRows)
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    U = new Usuario()
                     {
-                        reader.Read();
-                        if (!reader.IsDBNull(1))
-                        {
-                            U = new Usuario()
-                            {
-                                Id = Convert.ToInt32(reader["usuarioID"]),
-                                Username = reader["usuarioName"].ToString(),
-                                Password = reader["usuarioPass"].ToString(),
-                                Rol = (Rol)Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
-                                Alta = Convert.ToBoolean(reader["usuarioAlta"])
-                            };
-                        }
-                    }
+                        Id = Convert.ToInt32(reader["usuarioID"]),
+                        Username = reader["usuarioName"].ToString(),
+                        Password = reader["usuarioPass"].ToString(),
+                        Rol = (Rol)Enum.Parse(typeof(Rol), reader["usuarioRol"].ToString()),
+                        Alta = Convert.ToBoolean(reader["usuarioAlta"])
+                    };
                 }
+                reader.Close();
                 connection.Close();
+                connection.Dispose();
             }
 
             return U;

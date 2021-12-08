@@ -17,12 +17,16 @@ namespace CadeteriaWeb
             CreateMap<Usuario, UsuarioCreateViewModel>().ReverseMap();
             CreateMap<Usuario, UsuarioUpdateViewModel>().ReverseMap();
 
+            // --------------------MAPEO DE CADETES--------------------
+            CreateMap<Cadete, CadeteCreateViewModel>().ReverseMap();
+            CreateMap<Cadete, CadeteUpdateViewModel>().ReverseMap();
 
-            //CreateMap<Cadete, CadeteViewModel>().ReverseMap();
-            //CreateMap<Pedido, PedidoViewModel>().ReverseMap()
-            //    .ForMember(dest => dest.Observacion, opt => opt.MapFrom(src => src.)); 
-            //// asi miembro a miembro
-            //CreateMap<Cliente, ClienteViewModel>().ReverseMap();
+            // --------------------MAPEO DE PEDIDOS--------------------
+            CreateMap<Pedido, PedidoCreateViewModel>().ReverseMap()
+                .ForMember(dest => dest.Cliente.Id, opt => opt.MapFrom(src => src.IdCliente));
+            CreateMap<Pedido, PedidoUpdateViewModel>().ReverseMap()
+                .ForMember(dest => dest.Cliente.Id, opt => opt.MapFrom(src => src.IdCliente))
+                .ForMember(dest => dest.Cadete.Id, opt => opt.MapFrom(src => src.IdCadete));
         }
     }
 }

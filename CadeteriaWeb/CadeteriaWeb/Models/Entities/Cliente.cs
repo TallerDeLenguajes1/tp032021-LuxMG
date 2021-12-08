@@ -1,4 +1,4 @@
-﻿namespace CadeteriaWeb.Repositories
+﻿namespace CadeteriaWeb.Entities
 {
     public class Cliente
     {

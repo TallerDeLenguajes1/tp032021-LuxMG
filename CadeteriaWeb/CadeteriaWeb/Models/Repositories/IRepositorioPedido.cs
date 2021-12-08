@@ -11,6 +11,7 @@ namespace CadeteriaWeb.Repositories
         void DeletePedido(int id);
         List<Pedido> GetAllPedidos();
         Pedido GetPedidoById(int id);
+        List<Pedido> GetAllPedidosByPeopleID(int cadeteID = 0, int clienteID = 0);
         void InsertPedido(Pedido item);
         void UpdatePedido(Pedido item);
     }

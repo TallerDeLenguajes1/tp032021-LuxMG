@@ -1,7 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "Iniciar sesion";
+    ViewData["Title"] = "Crear usuario";
 }
-@model CadeteriaWeb.Models.UsuarioLoginViewModel;
+@model CadeteriaWeb.Models.UsuarioCreateViewModel;
 
 
 <section class="vh-100" style="background-color: #508bfc;">
@@ -11,9 +11,9 @@
                 <div class="card shadow-2-strong" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
 
-                        <h3 class="mb-5">Iniciar sesion</h3>
+                        <h3 class="mb-5">Crear usuario</h3>
 
-                        <form asp-action="LoginPost" method="post">
+                        <form asp-action="CreateUsuarioPost" method="post">
                             <div class="form-outline mb-4">
                                 <label asp-for="Username" class="form-label"></label>
                                 <input asp-for="Username" type="text" class="form-control form-control-lg">
@@ -26,21 +26,20 @@
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
 
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-
-                            <hr class="my-4">
-
-                            <div>
-                                <p class="mb-0">Aún no te registraste? <a asp-action="Register" class="fw-bold">Hazlo ahora!</a></p>
+                            <div class="form-outline mb-4">
+                                <label asp-for="PasswordRetry" class="form-label"></label>
+                                <input asp-for="PasswordRetry" type="password" class="form-control form-control-lg">
+                                <span asp-validation-for="PasswordRetry" class="text-danger"></span>
                             </div>
+
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Confimar</button>
 
                             @if (Model.Message != null && Model.Message != "")
                             {
                                 <hr class="my-4">
 
-                                <div class="form-outline mb-4 bg-danger">
-                                    <label asp-for="Message" class="form-label text-danger"></label>
-                                    <input asp-for="Message" type="text" class="form-control" readonly value="@Model.Message">
+                                <div class="alert alert-danger">
+                                    <strong>Error!</strong> @Model.Message
                                 </div>
                             }
 

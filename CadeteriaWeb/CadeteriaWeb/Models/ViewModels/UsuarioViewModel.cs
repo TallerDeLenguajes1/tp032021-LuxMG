@@ -28,10 +28,8 @@ namespace CadeteriaWeb.Models
 
         [Display(Name = "Error")]
         public string Message { get; set; }
-
-        public UsuarioCreateViewModel() { }
-        public UsuarioCreateViewModel(string message) { Message = message; }
     }
+
 
     public class UsuarioLoginViewModel
     {
@@ -47,10 +45,8 @@ namespace CadeteriaWeb.Models
 
         [Display(Name = "Error")]
         public string Message { get; set; }
-
-        public UsuarioLoginViewModel() { }
-        public UsuarioLoginViewModel(string message) { Message = message; }
     }
+
 
     public class UsuarioUpdateViewModel
     {
@@ -72,7 +68,9 @@ namespace CadeteriaWeb.Models
         [Display(Name = "Reingrese la contraseña")]
         public string PasswordRetry { get; set; }
 
-        public Rol Rol { get; set; }
+
+        [Display(Name = "Error")]
+        public string Message { get; set; }
     }
 
 }
