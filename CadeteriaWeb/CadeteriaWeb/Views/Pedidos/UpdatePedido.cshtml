@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Modificar pedido";
+}
+@model CadeteriaWeb.Models.PedidoUpdateViewModel;
+
+
+<section class="vh-100 bg-secondary">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <h3 class="mb-5">Modificar pedido</h3>
+
+                        <form asp-action="UpdatePedidoPost" method="post">
+                            <input hidden asp-for="Id" type="text" class="form-control form-control-lg">
+                            <input hidden asp-for="IdCliente" type="text" class="form-control form-control-lg">
+                            <input hidden asp-for="Estado" type="text" class="form-control form-control-lg">
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="Observacion" class="form-label"></label>
+                                <input asp-for="Observacion" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="Observacion" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="NombreCliente" class="form-label"></label>
+                                <input asp-for="NombreCliente" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="NombreCliente" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="DireccionCliente" class="form-label"></label>
+                                <input asp-for="DireccionCliente" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="DireccionCliente" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="TelefonoCliente" class="form-label"></label>
+                                <input asp-for="TelefonoCliente" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="TelefonoCliente" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="IdCadete" class="form-label"></label>
+                                <select asp-for="IdCadete" class="form-control form-control-lg form-select">
+                                    <option value="0">---Sin asignar---</option>
+                                    @foreach (var C in Model.Cadetes)
+                                    {
+                                        @if (Model.IdCadete != 0 && Model.IdCadete == C.Id)
+                                        {
+                                            <option value="@C.Id" selected>@C.Nombre</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@C.Id">@C.Nombre</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="IdCadete" class="text-danger"></span>
+                            </div>
+
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Confirmar</button>
+
+                            @if (Model.Message != null && Model.Message != "")
+                            {
+                                <hr class="my-4">
+
+                                <div class="alert alert-danger">
+                                    <strong>Error!</strong> @Model.Message
+                                </div>
+                            }
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

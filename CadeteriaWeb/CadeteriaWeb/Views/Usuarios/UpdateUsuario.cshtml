@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Modificar usuario";
+}
+@model CadeteriaWeb.Models.UsuarioUpdateViewModel;
+
+
+<section class="vh-100 bg-secondary">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <h3 class="mb-5">Modificar usuario</h3>
+
+                        <form asp-action="UpdateUsuarioPost" method="post">
+                            <input hidden asp-for="Id" type="text" class="form-control form-control-lg">
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="Username" class="form-label"></label>
+                                <input asp-for="Username" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" type="password" class="form-control form-control-lg">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="PasswordRetry" class="form-label"></label>
+                                <input asp-for="PasswordRetry" type="password" class="form-control form-control-lg">
+                                <span asp-validation-for="PasswordRetry" class="text-danger"></span>
+                            </div>
+
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Confirmar</button>
+
+                            @if (Model.Message != null && Model.Message != "")
+                            {
+                                <hr class="my-4">
+
+                                <div class="alert alert-danger">
+                                    <strong>Error!</strong> @Model.Message
+                                </div>
+                            }
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

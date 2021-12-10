@@ -1,4 +1,4 @@
-﻿using CadeteriaWeb.Entities;
+﻿using CadeteriaWeb.Repositories;
 using CadeteriaWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,18 +13,17 @@ namespace CadeteriaWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Cadeteria cadeteria;
-        private readonly Logger nlog;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(Logger nlog, Cadeteria cadeteria)
+        public HomeController(ILogger<HomeController> logger)
         {
-            this.nlog = nlog;
-            this.cadeteria = cadeteria;
+            this._logger = logger;
+            
         }
 
         public IActionResult Index()
         {
-            return View(cadeteria);
+            return View();
         }
 
         public IActionResult Privacy()

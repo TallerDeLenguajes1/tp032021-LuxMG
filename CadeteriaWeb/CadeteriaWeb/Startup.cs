@@ -1,4 +1,4 @@
-using CadeteriaWeb.Entities;
+using CadeteriaWeb.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,16 +6,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using NLog;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NLog.Web;
 
 namespace CadeteriaWeb
 {
     public class Startup
     {
-        public static Cadeteria cadeteria = new Cadeteria();
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,9 +26,34 @@ namespace CadeteriaWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(cadeteria);
-            services.AddSingleton(NLog.LogManager.GetCurrentClassLogger());
-            services.AddControllersWithViews();
+            services.AddAutoMapper(typeof(PerfilDeMapeo));
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            RepositorioCadeteSQL repoCadetes =
+                    new RepositorioCadeteSQL(
+                        Configuration.GetConnectionString("SqliteConnection"),
+                        NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger());
+            RepositorioClienteSQL repoClientes =
+                    new RepositorioClienteSQL(
+                        Configuration.GetConnectionString("SqliteConnection"),
+                        NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger());
+            RepositorioPedidoSQL repoPedidos =
+                    new RepositorioPedidoSQL(
+                        Configuration.GetConnectionString("SqliteConnection"),
+                        NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger());
+            RepositorioUsuarioSQL repoUsuarios =
+                    new RepositorioUsuarioSQL(
+                        Configuration.GetConnectionString("SqliteConnection"),
+                        NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger());
+
+            DataContext data = new DataContext(repoCadetes, repoClientes, repoPedidos, repoUsuarios);
+            services.AddSingleton(data);
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(60*60*24);
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +74,7 @@ namespace CadeteriaWeb
 
             app.UseRouting();
 
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
