@@ -3,47 +3,52 @@
 }
 @model CadeteriaWeb.Repositories.DataContext;
 
-<h1>Listado de usuarios</h1>
+<div class="container">
+    <main role="main" class="pb-3">
+        <hr class="my-4 border-white bg-white">
+        <h1>Listado de usuarios</h1>
 
-<p>
-    <a asp-action="CreateUsuario">Crear usuario</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                Nombre de usuario
-            </th>
-            <th>
-                Rol
-            </th>
-            <th>
-                Editar | Borrar
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Usuarios.GetAllUsuarios())
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Username)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Rol)
-                </td>
-                <td>
-                    <a asp-controller="Usuarios" asp-action="UpdateUsuario" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-                    |
-                    <a asp-controller="Usuarios" asp-action="DeleteUsuario" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <p>
+            <a asp-action="CreateUsuario">Crear usuario</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Nombre de usuario
+                    </th>
+                    <th>
+                        Rol
+                    </th>
+                    <th>
+                        Editar | Borrar
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Usuarios.GetAllUsuarios())
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rol)
+                        </td>
+                        <td>
+                            <a asp-controller="Usuarios" asp-action="UpdateUsuario" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                            |
+                            <a asp-controller="Usuarios" asp-action="DeleteUsuario" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+</div>

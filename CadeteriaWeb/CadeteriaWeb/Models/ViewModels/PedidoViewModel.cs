@@ -40,7 +40,6 @@ namespace CadeteriaWeb.Models
     {
         public int Id { get; set; }
         public int IdCliente { get; set; }
-        public int IdCadete { get; set; }
         public string Estado { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar una observacion")] // forza que se escriba algo ahi
@@ -63,6 +62,9 @@ namespace CadeteriaWeb.Models
         [StringLength(20)]
         [Display(Name = "Nro de telefono del cliente")]
         public string TelefonoCliente { get; set; }
+
+        [Display(Name = "Cadete")]
+        public int IdCadete { get; set; }
 
         public List<Cadete> Cadetes { get; set; }
 

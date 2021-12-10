@@ -28,57 +28,48 @@ namespace CadeteriaWeb.Controllers
 
 
         // -----------------------------------------------------------------
-        // ---------------------------INFO PEDIDO---------------------------
+        // --------------------------LISTA PEDIDOS--------------------------
         // -----------------------------------------------------------------
-        // INDEX: Pedidos/{id}
-        public IActionResult Index(int id = 0)
+        // INDEX: Pedidos/
+        public IActionResult Index()
         {
             if (!IsSesionIniciada())
                 return RedirectToAction("Login", "Usuarios");
-            if (id == 0)
+            if (GetRol() == "ADMIN")
                 return RedirectToAction("IndexAdmin");
 
-            var P = DB.Pedidos.GetPedidoById(id);
-            if(P == null)
-                return RedirectToAction("IndexAdmin");
+            return View(DB);
+        }
+        
+        // GET: Pedidos/IndexAdmin
+        public IActionResult IndexAdmin()
+        {
+            if (!IsSesionIniciada())
+                return RedirectToAction("Login", "Usuarios");
+            if (GetRol() != "ADMIN")
+                return RedirectToAction("Index");
 
-            return View(P);
+            // solo los admins pueden ver todos los pedidos
+            return View(DB);
         }
 
 
         // -----------------------------------------------------------------
         // ---------------------------INFO CLIENTE--------------------------
         // -----------------------------------------------------------------
-        // INDEX: Pedidos/VerCliente/{id}
+        // GET: Pedidos/VerCliente/{id}
         public IActionResult VerCliente(int id = 0)
         {
             if (!IsSesionIniciada())
                 return RedirectToAction("Login", "Usuarios");
-            if (id == 0)
-                return RedirectToAction("IndexAdmin");
+            if (GetRol() != "ADMIN")
+                return RedirectToAction("Index");
 
             var C = DB.Clientes.GetClienteById(id);
             if (C == null)
                 return RedirectToAction("IndexAdmin");
 
             return View(C);
-        }
-
-
-        // -----------------------------------------------------------------
-        // --------------------------LISTA PEDIDOS--------------------------
-        // -----------------------------------------------------------------
-        // GET: Pedidos/IndexAdmin
-        public IActionResult IndexAdmin()
-        {
-            if (!IsSesionIniciada())
-                return RedirectToAction("Login", "Usuarios");
-
-            // solo los admins pueden ver todos los pedidos
-            if (GetRol() == "ADMIN")
-                return View(DB);
-
-            return RedirectToAction("Index", "Home");
         }
 
 

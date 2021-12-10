@@ -3,59 +3,65 @@
 }
 @model CadeteriaWeb.Repositories.DataContext;
 
-<h1>Listado de cadetes</h1>
 
-<p>
-    <a asp-action="CreateCadete">Crear cadete</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                Nombre
-            </th>
-            <th>
-                Direccion
-            </th>
-            <th>
-                Telefono
-            </th>
-            <th>
-                Ver pedidos
-            </th>
-            <th>
-                Editar | Borrar
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Cadetes.GetAllCadetes())
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Direccion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Telefono)
-                </td>
-                <td>
-                    <a asp-controller="Cadetes" asp-action="Index" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-eye"></i></a>
-                </td>
-                <td>
-                    <a asp-controller="Cadetes" asp-action="UpdateCadete" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-                    |
-                    <a asp-controller="Cadetes" asp-action="DeleteCadete" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container">
+    <main role="main" class="pb-3">
+        <hr class="my-4 border-white bg-white">
+        <h1>Listado de cadetes</h1>
+
+        <p>
+            <a asp-action="CreateCadete">Crear cadete</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Direccion
+                    </th>
+                    <th>
+                        Telefono
+                    </th>
+                    <th>
+                        Ver pedidos
+                    </th>
+                    <th>
+                        Editar | Borrar
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Cadetes.GetAllCadetes())
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Direccion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Telefono)
+                        </td>
+                        <td>
+                            <a asp-controller="Cadetes" asp-action="Index" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-eye"></i></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Cadetes" asp-action="UpdateCadete" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                            |
+                            <a asp-controller="Cadetes" asp-action="DeleteCadete" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+</div>

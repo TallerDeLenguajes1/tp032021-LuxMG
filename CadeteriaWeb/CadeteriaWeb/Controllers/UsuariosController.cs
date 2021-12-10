@@ -53,7 +53,7 @@ namespace CadeteriaWeb.Controllers
             if (GetRol() == "ADMIN")
                 return View(DB);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index");
         }
 
 
@@ -171,7 +171,7 @@ namespace CadeteriaWeb.Controllers
         // GET: Usuarios/CreateUsuario
         public IActionResult CreateUsuario(UsuarioCreateViewModel usuarioVM = null)
         {
-            if (!IsSesionIniciada())
+            if (GetRol() != "ADMIN")
                 return RedirectToAction("Register");
 
             return View(usuarioVM);

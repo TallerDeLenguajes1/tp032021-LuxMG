@@ -35,8 +35,8 @@ namespace CadeteriaWeb.Controllers
         {
             if (!IsSesionIniciada())
                 return RedirectToAction("Login", "Usuarios");
-            if (id == 0)
-                return RedirectToAction("IndexAdmin");
+            if (GetRol() != "ADMIN")
+                return RedirectToAction("Index", "Pedidos");
 
             Cadete C = DB.Cadetes.GetCadeteById(id);
             if (C == null) 
@@ -63,12 +63,11 @@ namespace CadeteriaWeb.Controllers
         {
             if (!IsSesionIniciada())
                 return RedirectToAction("Login", "Usuarios");
+            if (GetRol() != "ADMIN")
+                return RedirectToAction("Index", "Usuarios");
 
             // solo los admins pueden ver todos los cadetes
-            if (GetRol() == "ADMIN")
-                return View(DB);
-
-            return RedirectToAction("Index", "Home");
+            return View(DB);
         }
 
 
@@ -76,9 +75,14 @@ namespace CadeteriaWeb.Controllers
         // --------------------------CARGA CADETES--------------------------
         // -----------------------------------------------------------------
         // GET: Cadetes/CreateCadete
-        public IActionResult CreateCadete(CadeteCreateViewModel cadeteVM = null)
+        public IActionResult CreateCadete()
         {
-            return View(cadeteVM);
+            if (!IsSesionIniciada())
+                return RedirectToAction("Login", "Usuarios");
+            if (GetRol() != "ADMIN")
+                return RedirectToAction("Index", "Usuarios");
+
+            return View(new CadeteCreateViewModel());
         }
 
         // POST: Cadetes/CreateCadetePost
