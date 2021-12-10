@@ -1,34 +1,53 @@
-﻿@model CadeteriaWeb.Entities.Cadete;
-@{
-    ViewData["Title"] = "Modificacion del cadete #" + Model.Id;
+﻿@{
+    ViewData["Title"] = "Modificar cadete";
 }
+@model CadeteriaWeb.Models.CadeteUpdateViewModel;
 
 
-<div class="text-center">
-    <h1 class="display-4">Modificar el cadete</h1>
-    <br />
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
 
-    <div class="form-group">
-        <form asp-action="UpdateCadete" method="post">
-            <div>
-                <h4>Datos del cadete: </h4>
-                <div class="form-group row">
-                    <label for="nombre">Nombre: </label>
-                    <input type="text" name="nombre" id="nombre" value="@Model.Nombre" class="form-control" />
+                        <h3 class="mb-5">Modificar cadete</h3>
+
+                        <form asp-action="UpdateCadetePost" method="post">
+                            <div class="form-outline mb-4">
+                                <label asp-for="Nombre" class="form-label"></label>
+                                <input asp-for="Nombre" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="Direccion" class="form-label"></label>
+                                <input asp-for="Direccion" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="Direccion" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label asp-for="Telefono" class="form-label"></label>
+                                <input asp-for="Telefono" type="text" class="form-control form-control-lg">
+                                <span asp-validation-for="Telefono" class="text-danger"></span>
+                            </div>
+
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Confirmar</button>
+
+                            @if (Model.Message != null && Model.Message != "")
+                            {
+                            <hr class="my-4">
+
+                            <div class="alert alert-danger">
+                                <strong>Error!</strong> @Model.Message
+                            </div>
+                            }
+
+                        </form>
+
+                    </div>
                 </div>
-                <div class="form-group row">
-                    <label for="direccion">Direccion: </label>
-                    <input type="text" name="direccion" id="direccion" value="@Model.Direccion" class="form-control" />
-                </div>
-                <div class="form-group row">
-                    <label for="telefono">Telefono: </label>
-                    <input type="text" name="telefono" id="telefono" value="@Model.Telefono" class="form-control" />
-                </div>
-                <input hidden type="number" name="id" value="@Model.Id" />
             </div>
-
-            <button class="btn btn-primary m-2" type="submit"> Confirmar </button>
-            <button asp-action="Index" class="btn btn-primary m-2"> Salir </button>
-        </form>
+        </div>
     </div>
-</div>
+</section>

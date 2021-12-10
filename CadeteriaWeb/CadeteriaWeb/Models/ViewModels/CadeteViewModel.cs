@@ -53,4 +53,18 @@ namespace CadeteriaWeb.Models
         public string Message { get; set; }
     }
 
+
+    public class CadeteListadoViewModel
+    {
+        public int Id { get; set; }
+
+        public string Nombre { get; set; }
+        public string Direccion { get; set; }
+        public string Telefono { get; set; }
+
+        public List<Pedido> Pedidos { get; set; }
+
+        [Display(Name = "Error")]
+        public string Message { get; set; }
+    }
 }

@@ -1,115 +1,45 @@
-﻿@*@{
-    ViewData["Title"] = "Listado pedidos";
+﻿@{
+    ViewData["Title"] = "Info Pedido";
 }
+@model CadeteriaWeb.Entities.Pedido;
 
-@model List<CadeteriaWeb.Entities.Pedido>;
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
 
-<div class="text-center">
-    <h1 class="display-4">Listado de Pedidos</h1>
-    <br />
+                        <h3 class="mb-5">Info Pedido</h3>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Observacion</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Entregar</th>
-                <th scope="col">Cancelar</th>
-                <th scope="col">Cliente</th>
-                <th scope="col">Cadete</th>
-                <th scope="col">Modificar</th>
-                <th scope="col">Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var P in Model)
-            {
-                <tr>
-                    <td> @P.Id </td>
-                    <td> @P.Observacion </td>
-                    <td> @P.Estado.ToString() </td>
+                        <div class="form-outline mb-4">
+                            <p>Observacion: @Model.Observacion</p>
+                        </div>
 
-                    <td>
-                        <form asp-action="EntregarPedido" method="post">
-                            <input hidden type="number" name="id" value="@P.Id" />
-                            @if (P.Estado != CadeteriaWeb.Entities.EstadoPedido.En_Camino)
+                        <div class="form-outline mb-4">
+                            <p>Estado: @Model.Estado</p>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <p>
+                                Cliente: @Model.Cliente.Nombre
+                                <a class="" asp-controller="Pedidos" asp-action="VerCliente" asp-route-id="@Model.Cliente.Id"><i class="bi bi-eye"></i></a>
+                            </p>
+
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div>
+                            @if (Model.Estado != CadeteriaWeb.Entities.EstadoPedido.Entregado && Model.Estado != CadeteriaWeb.Entities.EstadoPedido.Cancelado)
                             {
-                                <button type="submit" class="btn btn-success" disabled><i class="bi bi-check-circle"></i></button>
+                                <p class="mb-0">Querés modificar algún dato? <a asp-action="UpdatePedido" asp-route-id="@Model.Id" class="fw-bold">Haz click aquí!</a></p>
                             }
-                            else
-                            {
-                                <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i></button>
-                            }
-                        </form>
-                    </td>
-
-                    <td>
-                        <form asp-action="CancelarPedido" method="post">
-                            <input hidden type="number" name="id" value="@P.Id" />
-                            @if (P.Estado == CadeteriaWeb.Entities.EstadoPedido.Entregado || P.Estado == CadeteriaWeb.Entities.EstadoPedido.Cancelado)
-                            {
-                                <button type="submit" class="btn btn-danger" disabled><i class="bi bi-x-circle"></i></button>
-                            }
-                            else
-                            {
-                                <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i></button>
-                            }
-
-                        </form>
-                    </td>
-
-                    <td> @P.Cliente.Nombre   <a class="" asp-controller="Pedido" asp-action="VerCliente" asp-route-id="@P.Id"><i class="bi bi-eye"></i></a></td>
-
-                    <td>
-                        <form asp-action="AsignarCadete" method="post">
-                            <label for="cadetes" hidden>Cadetes:</label>
-                            <select id="cadetes" name="idCadete">
-                                <option value="0">---Sin asignar---</option>
-                                @foreach (var C in CadeteriaWeb.Entities.TempDB.ObtenerCadetes())
-                                {
-                                    @if (P.Cadete != null && P.Cadete.Id == C.Id)
-                                    {
-                                        <option value="@C.Id" selected>@C.Nombre</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@C.Id">@C.Nombre</option>
-                                    }
-                                }
-                            </select>
-
-                            <input hidden type="number" name="id" value="@P.Id" />
-                            @if (P.Estado == CadeteriaWeb.Entities.EstadoPedido.En_Camino || P.Estado == CadeteriaWeb.Entities.EstadoPedido.Procesando)
-                            {
-                                <button type="submit" class="btn btn-success"><i class="bi bi-save"></i></button>
-                            }
-                            else
-                            {
-                                <button type="submit" class="btn btn-success" disabled><i class="bi bi-save"></i></button>
-                            }
-
-                        </form>
-                    </td>
-
-                    <td>
-                        <form asp-action="UpdatePedido" method="post">
-                            <input hidden type="number" name="id" value="@P.Id" />
-                            <button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i></button>
-                        </form>
-                    </td>
-
-                    <td>
-                        <form asp-action="DeletePedido" method="post">
-                            <input hidden type="number" name="id" value="@P.Id" />
-                            <input hidden type="text" name="confirm" value="false" />
-                            <button type="submit" class="btn btn-primary"><i class="bi bi-trash"></i></button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>*@
-
-
+                            <p class="mb-0">Querés eliminar tu pedido? <a asp-action="DeletePedido" asp-route-id="@Model.Id" class="fw-bold">Haz click aquí!</a> <b class="text-danger">(La eliminación no es reversible, pensalo bien antes de hacerlo)</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

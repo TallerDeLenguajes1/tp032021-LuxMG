@@ -23,10 +23,19 @@ namespace CadeteriaWeb
 
             // --------------------MAPEO DE PEDIDOS--------------------
             CreateMap<Pedido, PedidoCreateViewModel>().ReverseMap()
-                .ForMember(dest => dest.Cliente.Id, opt => opt.MapFrom(src => src.IdCliente));
+                .ForMember(dest => dest.Cliente, opt => opt.MapFrom(src => src));
             CreateMap<Pedido, PedidoUpdateViewModel>().ReverseMap()
-                .ForMember(dest => dest.Cliente.Id, opt => opt.MapFrom(src => src.IdCliente))
-                .ForMember(dest => dest.Cadete.Id, opt => opt.MapFrom(src => src.IdCadete));
+                .ForMember(dest => dest.Cliente, opt => opt.MapFrom(src => src))
+                .ForMember(dest => dest.Cadete, opt => opt.MapFrom(src => src));
+
+            CreateMap<Pedido, Cliente>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Cliente.Id))
+                .ForMember(dst => dst.Nombre, opt => opt.MapFrom(src => src.Cliente.Nombre))
+                .ForMember(dst => dst.Direccion, opt => opt.MapFrom(src => src.Cliente.Direccion))
+                .ForMember(dst => dst.Telefono, opt => opt.MapFrom(src => src.Cliente.Telefono));
+
+            CreateMap<Pedido, Cadete>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Cadete.Id));
         }
     }
 }

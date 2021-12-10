@@ -39,8 +39,9 @@
                     @Html.DisplayFor(modelItem => item.Rol)
                 </td>
                 <td>
-                    @Html.ActionLink("Editar", "UpdateUsuario", new { id = item.Id }) |
-                    @Html.ActionLink("Borrar", "DeleteUsuario", new { id = item.Id })
+                    <a asp-controller="Usuarios" asp-action="UpdateUsuario" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                    |
+                    <a asp-controller="Usuarios" asp-action="DeleteUsuario" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                 </td>
             </tr>
         }

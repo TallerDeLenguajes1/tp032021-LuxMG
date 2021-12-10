@@ -54,7 +54,7 @@
 
         public void Entregar()
         {
-            Cadete.Jornal += 100;
+            //Cadete.Jornal += 100;
             Estado = EstadoPedido.Entregado;
         }
 

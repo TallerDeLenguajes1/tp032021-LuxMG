@@ -148,9 +148,8 @@ namespace CadeteriaWeb.Controllers
                     }
 
                     Usuario U = mapper.Map<Usuario>(usuario);
-                    U.Rol = Rol.USER; // por defecto se crean como usuarios
 
-                    _logger.LogInformation($"CREACION DE USUARIO - USERNAME:{U.Username}");
+                    _logger.LogInformation($"REGISTRO DE USUARIO - USERNAME:{U.Username}");
 
                     DB.Usuarios.InsertUsuario(U);
                     return RedirectToAction("Login");
@@ -160,7 +159,7 @@ namespace CadeteriaWeb.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError($"ERROR EN CREACION DE USUARIO - EXCEPTION:{e.Message}");
+                _logger.LogError($"ERROR EN REGISTRO DE USUARIO - EXCEPTION:{e.Message}");
                 return RedirectToAction("Index");
             }
         }
@@ -172,6 +171,9 @@ namespace CadeteriaWeb.Controllers
         // GET: Usuarios/CreateUsuario
         public IActionResult CreateUsuario(UsuarioCreateViewModel usuarioVM = null)
         {
+            if (!IsSesionIniciada())
+                return RedirectToAction("Register");
+
             return View(usuarioVM);
         }
 

@@ -34,11 +34,24 @@ namespace CadeteriaWeb.Controllers
         public IActionResult Index(int id = 0)
         {
             if (!IsSesionIniciada())
-                return RedirectToAction("Login");
+                return RedirectToAction("Login", "Usuarios");
             if (id == 0)
                 return RedirectToAction("IndexAdmin");
 
-            return View(DB.Pedidos.GetAllPedidosByPeopleID(cadeteID: id));
+            Cadete C = DB.Cadetes.GetCadeteById(id);
+            if (C == null) 
+                return RedirectToAction("IndexAdmin");
+
+            CadeteListadoViewModel cadeteVM = new()
+            {
+                Id = C.Id,
+                Nombre = C.Nombre,
+                Direccion = C.Direccion,
+                Telefono = C.Telefono,
+                Pedidos = DB.Pedidos.GetAllPedidos(C.Id)
+            };
+
+            return View(cadeteVM);
         }
 
 
@@ -49,7 +62,7 @@ namespace CadeteriaWeb.Controllers
         public IActionResult IndexAdmin()
         {
             if (!IsSesionIniciada())
-                return RedirectToAction("Login");
+                return RedirectToAction("Login", "Usuarios");
 
             // solo los admins pueden ver todos los cadetes
             if (GetRol() == "ADMIN")
@@ -102,7 +115,7 @@ namespace CadeteriaWeb.Controllers
         public IActionResult DeleteCadete(int id = 0)
         {
             if (!IsSesionIniciada())
-                return RedirectToAction("Login");
+                return RedirectToAction("Login", "Usuarios");
             if (id == 0)
                 return RedirectToAction("IndexAdmin");
 
@@ -138,7 +151,7 @@ namespace CadeteriaWeb.Controllers
         public IActionResult UpdateCadete(int id = 0, CadeteUpdateViewModel cadeteVM = null)
         {
             if (!IsSesionIniciada())
-                return RedirectToAction("Login");
+                return RedirectToAction("Login", "Usuarios");
 
             try
             {
@@ -172,6 +185,7 @@ namespace CadeteriaWeb.Controllers
                 if (ModelState.IsValid)
                 {
                     Cadete C = mapper.Map<Cadete>(cadete);
+                    C.Id = cadete.Id;
 
                     DB.Cadetes.UpdateCadete(C);
                     _logger.LogInformation($"UPDATE DE CADETE - ID:{C.Id}, NOMBRE:{C.Nombre}, DIRECCION:{C.Direccion}, TELEFONO:{C.Telefono}");

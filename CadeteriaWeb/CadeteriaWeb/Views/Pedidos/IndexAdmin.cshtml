@@ -1,24 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Info Cadete";
+    ViewData["Title"] = "Lista de Pedidos";
 }
-@model CadeteriaWeb.Models.CadeteListadoViewModel;
-
-<h1>Info Cadete</h1>
-<div class="form-outline mb-4">
-    <p>Nombre: @Model.Nombre</p>
-</div>
-<div class="form-outline mb-4">
-    <p>Direccion: @Model.Direccion</p>
-</div>
-<div class="form-outline mb-4">
-    <p>Telefono: @Model.Telefono</p>
-</div>
-
-<hr class="my-4">
+@model CadeteriaWeb.Repositories.DataContext;
 
 <h1>Listado de pedidos</h1>
+
 <p>
-    <a asp-action="CreatePedido" asp-controller="Pedidos" asp-route-id="@Model.Id">Crear pedido</a>
+    <a asp-action="CreatePedido" asp-controller="Pedidos">Crear pedido</a>
 </p>
 <table class="table">
     <thead>
@@ -36,15 +24,18 @@
                 Cliente
             </th>
             <th>
+                Cadete
+            </th>
+            <th>
                 Entregar | Cancelar
             </th>
             <th>
-                Modificar | Eliminar
+                Modificar
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Pedidos)
+        @foreach (var item in Model.Pedidos.GetAllPedidos())
         {
             <tr>
                 <td>
@@ -58,8 +49,23 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Cliente.Nombre)
+                    <a class="" asp-controller="Pedidos" asp-action="VerCliente" asp-route-id="@item.Cliente.Id"><i class="bi bi-eye"></i></a>
                 </td>
-                <td class="align-content-center justify-content-center">
+                <td>
+                    @if (item.Cadete == null)
+                    {
+                        @if (item.Estado != CadeteriaWeb.Entities.EstadoPedido.Cancelado)
+                        {
+                            <a class="" asp-controller="Pedidos" asp-action="UpdatePedido" asp-route-id="@item.Id">Asignar cadete</a>
+                        }
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Cadete.Nombre)
+                        <a class="" asp-controller="Cadetes" asp-action="Index" asp-route-id="@item.Cadete.Id"><i class="bi bi-eye"></i></a>
+                    }
+                </td>
+                <td>
                     @if (item.Estado != CadeteriaWeb.Entities.EstadoPedido.En_Camino)
                     {
                         <a asp-action="EntregarPedido" asp-controller="Pedidos" asp-route-id="@item.Id" class="btn btn-success disabled"><i class="bi bi-check-circle"></i></a>
@@ -78,14 +84,14 @@
                         <a asp-action="CancelarPedido" asp-controller="Pedidos" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-x-circle"></i></a>
                     }
                 </td>
-                <td class="align-content-center justify-content-center">
-                    @if (item.Estado == CadeteriaWeb.Entities.EstadoPedido.Entregado || item.Estado == CadeteriaWeb.Entities.EstadoPedido.Cancelado)
+                <td>
+                    @if (item.Estado == CadeteriaWeb.Entities.EstadoPedido.En_Camino || item.Estado == CadeteriaWeb.Entities.EstadoPedido.Procesando)
                     {
-                        <a asp-controller="Pedidos" asp-action="UpdatePedido" asp-route-id="@item.Id" class="btn btn-primary disabled"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Pedidos" asp-action="UpdatePedido" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
                     }
                     else
                     {
-                        <a asp-controller="Pedidos" asp-action="UpdatePedido" asp-route-id="@item.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Pedidos" asp-action="UpdatePedido" asp-route-id="@item.Id" class="btn btn-primary disabled"><i class="bi bi-pencil-square"></i></a>
                     }
                     |
                     <a asp-controller="Pedidos" asp-action="DeletePedido" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i></a>

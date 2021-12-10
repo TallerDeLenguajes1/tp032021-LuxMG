@@ -202,7 +202,7 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioAlta AND usuarioName = @username";
+                string SQLQuery = $"SELECT * FROM Usuarios WHERE usuarioName = @username";
                 SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
                 command.Parameters.AddWithValue("@username", username);
 

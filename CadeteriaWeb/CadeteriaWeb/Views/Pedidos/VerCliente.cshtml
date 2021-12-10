@@ -1,27 +1,37 @@
-﻿@model CadeteriaWeb.Entities.Cliente;
-@{
-    ViewData["Title"] = "Datos del cliente " + Model.Nombre;
+﻿@{
+    ViewData["Title"] = "Info Cliente";
 }
+@model CadeteriaWeb.Entities.Cliente;
 
+<section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
 
-<div class="text-center">
-    <h1 class="display-4">Ver cliente</h1>
-    <br />
+                        <h3 class="mb-5">Info Cliente</h3>
 
-    <div>
-        <h4>Datos del cliente: </h4>
-        <div class="form-group row">
-            <label><b>Nombre: </b>@Model.Nombre</label>
+                        <div class="form-outline mb-4">
+                            <p>Nombre: @Model.Nombre</p>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <p>Direccion: @Model.Direccion</p>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <p>Telefono: @Model.Telefono</p>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div>
+                            <p class="mb-0">Recordá que para modificar algún dato solo tenés que modificar el pedido asociado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group row">
-            <label><b>Direccion: </b>@Model.Direccion</label>
-        </div>
-        <div class="form-group row">
-            <label><b>Telefono: </b>@Model.Telefono</label>
-        </div>
-
     </div>
-</div>
-
-
-
+</section>

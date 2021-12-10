@@ -47,14 +47,20 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"INSERT INTO Pedidos(pedidoObs, pedidoEstado, clienteID, cadeteID, cadeteAlta)" +
+                string SQLQuery = $"INSERT INTO Pedidos(pedidoObs, pedidoEstado, clienteID, pedidoAlta)" +
+                    $" VALUES(@pedidoObs, @pedidoEstado, @clienteID, 1);";
+
+                if (item.Cadete != null)
+                {
+                    SQLQuery = $"INSERT INTO Pedidos(pedidoObs, pedidoEstado, clienteID, cadeteID, pedidoAlta)" +
                     $" VALUES(@pedidoObs, @pedidoEstado, @clienteID, @cadeteID, 1);";
+                }
 
                 SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
                 command.Parameters.AddWithValue("@pedidoObs", item.Observacion);
                 command.Parameters.AddWithValue("@pedidoEstado", item.Estado.ToString());
                 command.Parameters.AddWithValue("@clienteID", item.Cliente.Id);
-                command.Parameters.AddWithValue("@cadeteID", item.Cadete.Id);
+                if (item.Cadete != null) command.Parameters.AddWithValue("@cadeteID", item.Cadete.Id);
 
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -71,16 +77,24 @@ namespace CadeteriaWeb.Repositories
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
+
                 string SQLQuery = $"UPDATE Pedidos" +
-                    $" SET pedidoObs = @pedidoObs, pedidoEstado = @pedidoEstado, clienteID = @clienteID, cadeteID = @cadeteID" +
+                    $" SET pedidoObs = @pedidoObs, pedidoEstado = @pedidoEstado" +
                     $" WHERE pedidoID = @id";
+
+                if (item.Cadete != null)
+                {
+                    SQLQuery = $"UPDATE Pedidos" +
+                    $" SET pedidoObs = @pedidoObs, pedidoEstado = @pedidoEstado, cadeteID = @cadeteID" +
+                    $" WHERE pedidoID = @id";
+                }
+                
 
                 SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
                 command.Parameters.AddWithValue("@id", item.Id);
                 command.Parameters.AddWithValue("@pedidoObs", item.Observacion);
                 command.Parameters.AddWithValue("@pedidoEstado", item.Estado.ToString());
-                command.Parameters.AddWithValue("@clienteID", item.Cliente.Id);
-                command.Parameters.AddWithValue("@cadeteID", item.Cadete.Id);
+                if (item.Cadete != null)  command.Parameters.AddWithValue("@cadeteID", item.Cadete.Id);
 
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -92,38 +106,42 @@ namespace CadeteriaWeb.Repositories
         // -----------------------------------------------------------------
         // -------------------------GET PEDIDOS--------------------------
         // -----------------------------------------------------------------
-        public List<Pedido> GetAllPedidos()
+        public List<Pedido> GetAllPedidos(int cadeteID = 0)
         {
             List<Pedido> ListadoPedidos = new();
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"SELECT * FROM Pedido WHERE pedidoAlta";
+                string SQLQuery = $"SELECT * FROM Pedidos WHERE pedidoAlta";
+                if (cadeteID != 0) SQLQuery += $" AND cadeteID = @cadeteID";
 
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, connection))
+                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
+                if (cadeteID != 0) command.Parameters.AddWithValue("@cadeteID", cadeteID);
+
+                var reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Cadete C = new RepositorioCadeteSQL(connectionString, log).GetCadeteById(Convert.ToInt32(reader["cadeteID"]));
-                            Cliente Ci = new RepositorioClienteSQL(connectionString, log).GetClienteById(Convert.ToInt32(reader["clienteID"]));
+                    var aux = reader["cadeteID"].ToString();
+                    Cadete C = null;
+                    if(aux != "")
+                        C = new RepositorioCadeteSQL(connectionString, log).GetCadeteById(Convert.ToInt32(aux));
+                    Cliente Ci = new RepositorioClienteSQL(connectionString, log).GetClienteById(Convert.ToInt32(reader["clienteID"]));
 
-                            Pedido P = new Pedido()
-                            {
-                                Id = Convert.ToInt32(reader["pedidoID"]),
-                                Observacion = reader["pedidoObs"].ToString(),
-                                Estado = (EstadoPedido) Enum.Parse(typeof(EstadoPedido), reader["pedidoEstado"].ToString()),
-                                Cliente = Ci,
-                                Cadete = C,
-                                Alta = Convert.ToBoolean(reader["pedidoAlta"])
-                            };
-                            ListadoPedidos.Add(P);
-                        }
-                    }
+                    Pedido P = new Pedido()
+                    {
+                        Id = Convert.ToInt32(reader["pedidoID"]),
+                        Observacion = reader["pedidoObs"].ToString(),
+                        Estado = (EstadoPedido)Enum.Parse(typeof(EstadoPedido), reader["pedidoEstado"].ToString()),
+                        Cliente = Ci,
+                        Cadete = C,
+                        Alta = Convert.ToBoolean(reader["pedidoAlta"])
+                    };
+                    ListadoPedidos.Add(P);
                 }
+                reader.Close();
                 connection.Close();
+                connection.Dispose();
             }
 
             return ListadoPedidos;
@@ -145,7 +163,10 @@ namespace CadeteriaWeb.Repositories
                 reader.Read();
                 if (reader.HasRows)
                 {
-                    Cadete C = new RepositorioCadeteSQL(connectionString, log).GetCadeteById(Convert.ToInt32(reader["cadeteID"]));
+                    var aux = reader["cadeteID"].ToString();
+                    Cadete C = null;
+                    if (aux != "")
+                        C = new RepositorioCadeteSQL(connectionString, log).GetCadeteById(Convert.ToInt32(aux));
                     Cliente Ci = new RepositorioClienteSQL(connectionString, log).GetClienteById(Convert.ToInt32(reader["clienteID"]));
 
                     P = new Pedido()
@@ -167,45 +188,5 @@ namespace CadeteriaWeb.Repositories
         }
 
 
-        public List<Pedido> GetAllPedidosByPeopleID(int cadeteID = 0, int clienteID = 0)
-        {
-            List<Pedido> ListadoPedidos = new();
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                string SQLQuery = $"SELECT * FROM Pedido WHERE pedidoAlta";
-
-                if (cadeteID != 0) SQLQuery += $" AND cadeteID = @cadeteID";
-                if (clienteID != 0) SQLQuery += $" AND clienteID = @clienteID";
-
-                SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
-                if (cadeteID != 0) command.Parameters.AddWithValue("@cadeteID", cadeteID);
-                if (clienteID != 0) command.Parameters.AddWithValue("@clienteID", clienteID);
-
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    Cadete C = new RepositorioCadeteSQL(connectionString, log).GetCadeteById(Convert.ToInt32(reader["cadeteID"]));
-                    Cliente Ci = new RepositorioClienteSQL(connectionString, log).GetClienteById(Convert.ToInt32(reader["clienteID"]));
-
-                    Pedido P = new Pedido()
-                    {
-                        Id = Convert.ToInt32(reader["pedidoID"]),
-                        Observacion = reader["pedidoObs"].ToString(),
-                        Estado = (EstadoPedido)Enum.Parse(typeof(EstadoPedido), reader["pedidoEstado"].ToString()),
-                        Cliente = Ci,
-                        Cadete = C,
-                        Alta = Convert.ToBoolean(reader["pedidoAlta"])
-                    };
-                    ListadoPedidos.Add(P);
-                }
-                reader.Close();
-                connection.Close();
-                connection.Dispose();
-            }
-
-            return ListadoPedidos;
-        }
     }
 }

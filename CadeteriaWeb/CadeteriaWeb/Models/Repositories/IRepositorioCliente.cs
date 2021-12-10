@@ -11,6 +11,7 @@ namespace CadeteriaWeb.Repositories
         void DeleteCliente(int id);
         List<Cliente> GetAllClientes();
         Cliente GetClienteById(int id);
+        Cliente GetClienteByInfo(string nombre, string direccion, string telefono);
         void InsertCliente(Cliente item);
         void UpdateCliente(Cliente item);
     }

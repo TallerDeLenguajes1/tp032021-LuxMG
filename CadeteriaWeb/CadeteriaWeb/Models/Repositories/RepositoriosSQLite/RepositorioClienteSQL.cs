@@ -158,16 +158,18 @@ namespace CadeteriaWeb.Repositories
             return C;
         }
 
-        public Cliente GetClienteByName(string nombre)
+        public Cliente GetClienteByInfo(string nombre, string direccion, string telefono)
         {
             Cliente C = null;
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string SQLQuery = $"SELECT * FROM Clientes WHERE clienteAlta AND clienteNombre = @nombre";
+                string SQLQuery = $"SELECT * FROM Clientes WHERE clienteAlta AND clienteNombre = @nombre AND clienteDireccion = @direccion AND clienteTelefono = @telefono";
                 SQLiteCommand command = new SQLiteCommand(SQLQuery, connection);
                 command.Parameters.AddWithValue("@nombre", nombre);
+                command.Parameters.AddWithValue("@direccion", direccion);
+                command.Parameters.AddWithValue("@telefono", telefono);
 
                 var reader = command.ExecuteReader();
 
